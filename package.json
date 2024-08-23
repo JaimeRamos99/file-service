@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "npm run build && node build/index.js"
+    "start": "doppler run --command='npm run build && node build/index.js'"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,9 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "@google-cloud/storage": "^7.12.1",
+    "envalid": "^8.0.0",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
   }
 }
