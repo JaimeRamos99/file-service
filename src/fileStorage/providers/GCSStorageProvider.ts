@@ -1,4 +1,4 @@
-import { IFileStorageProvider, IStorageConfig } from '../../interfaces/fileStorageProvider';
+import { IFileStorageProvider, IStorageConfig } from '../fileStorageProvider';
 import { env } from '../../utils/secretManager';
 import { Storage } from '@google-cloud/storage';
 
@@ -11,8 +11,8 @@ export default class GCSStorageProvider implements IFileStorageProvider {
         this.storageInstance = new Storage();
     }
 
-    async uploadFile(): Promise<string> {
-        const response = await this.storageInstance.bucket(this.config.bucketName).upload('', this.config.options);
+    async uploadFile(filePath: string): Promise<string> {
+        const response = await this.storageInstance.bucket(this.config.bucketName).upload(filePath, this.config.options);
         return '';
     };
 
