@@ -11,9 +11,8 @@ export default class GCSStorageProvider implements IFileStorageProvider {
         this.storageInstance = new Storage();
     }
 
-    async uploadFile(filePath: string): Promise<string> {
-        const response = await this.storageInstance.bucket(this.config.bucketName).upload(filePath, this.config.options);
-        return '';
+    async uploadFile(filePath: string): Promise<void> {
+        await this.storageInstance.bucket(this.config.bucketName).upload(filePath, this.config.options);
     };
 
     async getFileLink(): Promise<string> {
