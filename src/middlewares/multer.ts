@@ -1,26 +1,43 @@
-import multer from 'multer';
+import multer, { FileFilterCallback, } from 'multer';
+import { env } from '../utils/secretManager'
+import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
+import fs from 'fs';
+
+const allowedFileTypes: Record<string, string> = {
+  '.pdf': 'application/pdf',
+};
+
+// Ensure the uploads directory exists
+const UPLOAD_DIR = path.join(process.cwd(), env.UPLOAD_TEMP_FOLDER_NAME);
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // Directory to save the uploaded files
+      cb(null, UPLOAD_DIR); // Directory to save the uploaded files
     },
     filename: function (req, file, cb) {
-      cb(null, file.originalname + Date.now() + path.extname(file.originalname)); // Append timestamp to file name
+    const ext = path.extname(file.originalname).toLowerCase();
+    const baseName = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_.-]/g, '');
+    const uniqueName = `${uuidv4()}_${baseName}${ext}`;
+      cb(null, uniqueName);
     }
 });
+
+const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (allowedFileTypes[ext] && allowedFileTypes[ext] === file.mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type, only PDF is allowed!'));
+  }
+};
   
 // Initialize Multer with storage configuration
 export const upload = multer({
     storage: storage,
-    fileFilter: function (req, file, cb) {
-      // Check the file extension to ensure it's a PDF
-      if (path.extname(file.originalname).toLowerCase() !== '.pdf') {
-        // Pass null as to the first argument to indicate no system error
-        // Pass false as the second argument because it only indicates the file is rejected
-        return cb(new Error('Only PDFs are allowed'));
-      }
-      // If the file is a PDF, accept the file
-      cb(null, true);
-    }
+    limits: { fileSize: 1024 * 1024 * 5, files: 1 }, // 5MB limit
+    fileFilter,
 });
