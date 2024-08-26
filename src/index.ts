@@ -4,6 +4,8 @@ import { upload } from './middlewares';
 import { env } from './utils'
 import FileStorageManager from './fileStorage/fileStorageManager';
 import GCSStorageProvider from './fileStorage/providers/GCSStorageProvider';
+import FileInterpreterManager from './fileInterpreter/fileInterpreterManager';
+import { GCPDocumentAI } from './fileInterpreter/providers/GCPDocumentAI';
 
 const app = express();
 
@@ -14,9 +16,14 @@ app.post('/upload', upload.single('file'), async(req, res) => {
       return res.status(400).send({ error: true, message: 'No file uploaded.' });
     }
 
+    // upload file to cloud provider
     const fileStorageManager = new FileStorageManager(new GCSStorageProvider());
     await fileStorageManager.uploadFile(filePath);
     
+    // extract file attributes
+    const fileInterpreterManager = new FileInterpreterManager(new GCPDocumentAI());
+    await fileInterpreterManager.processFile(filePath);
+
     fs.unlink(filePath, (err) => {
       if (err) console.error('Failed to delete temporary file:', err);
     });
