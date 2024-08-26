@@ -1,4 +1,4 @@
-import { cleanEnv, json, num, str } from "envalid";
+import { cleanEnv, json, num, str } from 'envalid';
 
 export const env = cleanEnv(process.env, {
   GCP_DOCUMENTAI_LOCATION: str(),

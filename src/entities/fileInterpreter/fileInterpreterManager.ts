@@ -1,4 +1,4 @@
-import { IFileInterpreter } from "./fileInterpreter";
+import { IFileInterpreter } from './fileInterpreter';
 
 export default class FileInterpreterManager {
   private interpreter: IFileInterpreter;
