@@ -1,10 +1,8 @@
 import express from 'express';
 import fs from 'fs';
 import { upload } from '../middlewares';
-import FileStorageManager from '../entities/fileStorage/fileStorageManager';
-import GCSStorageProvider from '../entities/fileStorage/providers/GCSStorageProvider';
-import FileInterpreterManager from '../entities/fileInterpreter/fileInterpreterManager';
-import { GCPDocumentAI } from '../entities/fileInterpreter/providers/GCPDocumentAI';
+import { FileStorageManager, GCSStorageProvider } from '../entities/fileStorage';
+import { FileInterpreterManager, GCPDocumentAI } from '../entities/fileInterpreter';
 
 const filesRouter = express.Router();
 
@@ -23,6 +21,7 @@ filesRouter.post('/upload', upload.single('file'), async(req, res) => {
         const fileInterpreterManager = new FileInterpreterManager(new GCPDocumentAI());
         await fileInterpreterManager.processFile(filePath);
     
+        // delete local file
         fs.unlink(filePath, (err) => {
           if (err) console.error('Failed to delete temporary file:', err);
         });

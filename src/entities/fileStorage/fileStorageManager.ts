@@ -1,6 +1,6 @@
 import { IFileStorageProvider } from "./fileStorageProvider";
 
-export default class fileStorageManager {
+export default class FileStorageManager {
     private provider: IFileStorageProvider;
     constructor(provider: IFileStorageProvider) {
         this.provider = provider;

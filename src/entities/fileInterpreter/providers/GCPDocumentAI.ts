@@ -3,10 +3,9 @@ import { IFileInterpreter } from "../fileInterpreter";
 import { promises as fs } from 'fs';
 import { DocumentProcessorServiceClient } from '@google-cloud/documentai/build/src/v1';
 
-
 const client = new DocumentProcessorServiceClient();
 
-export class GCPDocumentAI implements IFileInterpreter{
+export default class GCPDocumentAI implements IFileInterpreter{
     private processorName: string;
     
     constructor() {
