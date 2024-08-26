@@ -1,4 +1,5 @@
 import multer, { FileFilterCallback, } from 'multer';
+import { Request, Response, NextFunction } from 'express';
 import { env } from '../utils/secretManager'
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
@@ -36,10 +37,18 @@ const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFil
     cb(new Error('Invalid file type, only PDF is allowed!'));
   }
 };
-  
+
 // Initialize Multer with storage configuration
 export const upload = multer({
     storage: storage,
     limits: { fileSize: 1024 * 1024 * 5, files: 1 }, // 5MB limit
     fileFilter,
 });
+
+export const validateFileUpload = (req: Request, res: Response, next: NextFunction) => {
+    const filePath = req.file?.path;
+    if (!filePath) {
+        return res.status(400).send({ error: true, message: 'No file uploaded.' });
+    }
+    next();
+};
