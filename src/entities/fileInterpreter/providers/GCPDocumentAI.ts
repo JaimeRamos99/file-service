@@ -1,4 +1,4 @@
-import { env } from "../../utils";
+import { env } from "../../../utils";
 import { IFileInterpreter } from "../fileInterpreter";
 import { promises as fs } from 'fs';
 import { DocumentProcessorServiceClient } from '@google-cloud/documentai/build/src/v1';
