@@ -1,5 +1,5 @@
 import { IFileStorageProvider, IStorageConfig } from '../fileStorageProvider';
-import { env } from '../../utils/secretManager';
+import { env } from '../../../utils/secretManager';
 import { Storage } from '@google-cloud/storage';
 
 const storageInstance = new Storage(); // Shared instance initialized once
