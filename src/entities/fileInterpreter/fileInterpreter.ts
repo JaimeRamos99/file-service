@@ -1,3 +1,3 @@
 export interface IFileInterpreter {
-    extractDocumentFields(filePath: string): unknown;
+  extractDocumentFields(filePath: string): unknown;
 }
