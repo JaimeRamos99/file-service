@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from 'fs';
 
 /**
  * Deletes a specified file and logs any errors encountered during the deletion.
@@ -7,7 +7,7 @@ import fs from "fs";
 export function deleteFile(filePath: string): void {
   fs.unlink(filePath, (err) => {
     if (err) {
-      console.error("Failed to delete file:", err);
+      console.error('Failed to delete file:', err);
     } else {
       console.log(`File deleted: ${filePath}`);
     }

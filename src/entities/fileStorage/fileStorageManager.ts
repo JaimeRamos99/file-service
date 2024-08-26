@@ -1,4 +1,4 @@
-import { IFileStorageProvider } from "./fileStorageProvider";
+import { IFileStorageProvider } from './fileStorageProvider';
 
 export default class FileStorageManager {
   private provider: IFileStorageProvider;

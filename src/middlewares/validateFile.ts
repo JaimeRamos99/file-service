@@ -1,12 +1,12 @@
-import multer, { FileFilterCallback } from "multer";
-import { Request, Response, NextFunction } from "express";
-import { env } from "../utils/secretManager";
-import { v4 as uuidv4 } from "uuid";
-import path from "path";
-import fs from "fs";
+import multer, { FileFilterCallback } from 'multer';
+import { Request, Response, NextFunction } from 'express';
+import { env } from '../utils/secretManager';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+import fs from 'fs';
 
 const allowedFileTypes: Record<string, string> = {
-  ".pdf": "application/pdf",
+  '.pdf': 'application/pdf',
 };
 
 // Directory to save the uploaded files
@@ -23,24 +23,18 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname).toLowerCase();
-    const baseName = path
-      .basename(file.originalname, ext)
-      .replace(/[^a-zA-Z0-9_.-]/g, "");
+    const baseName = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_.-]/g, '');
     const uniqueName = `${uuidv4()}_${baseName}${ext}`;
     cb(null, uniqueName);
   },
 });
 
-const fileFilter = (
-  req: Express.Request,
-  file: Express.Multer.File,
-  cb: FileFilterCallback,
-) => {
+const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFilterCallback) => {
   const ext = path.extname(file.originalname).toLowerCase();
   if (allowedFileTypes[ext] && allowedFileTypes[ext] === file.mimetype) {
     cb(null, true);
   } else {
-    cb(new Error("Invalid file type, only PDF is allowed!"));
+    cb(new Error('Invalid file type, only PDF is allowed!'));
   }
 };
 
@@ -51,14 +45,10 @@ export const upload = multer({
   fileFilter,
 });
 
-export const validateFileUpload = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const validateFileUpload = (req: Request, res: Response, next: NextFunction) => {
   const filePath = req.file?.path;
   if (!filePath) {
-    return res.status(400).send({ error: true, message: "No file uploaded." });
+    return res.status(400).send({ error: true, message: 'No file uploaded.' });
   }
   next();
 };

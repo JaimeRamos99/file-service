@@ -1,2 +1,2 @@
-export * from "./secretManager";
-export * from "./files";
+export * from './secretManager';
+export * from './files';
