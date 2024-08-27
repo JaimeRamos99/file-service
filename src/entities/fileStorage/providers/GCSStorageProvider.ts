@@ -20,7 +20,7 @@ export default class GCSStorageProvider implements IFileStorageProvider {
     return file.name;
   }
 
-  async getFileLink(fileName: string): Promise<string> {
+  async getSignedURL(fileName: string): Promise<string> {
     // TO DO: cache for 24 hours, create a variable that expires and cache for the same time
     const [url] = await storageInstance
       .bucket(this.config.bucketName)
