@@ -10,5 +10,7 @@ export default class FileStorageManager {
     return await this.provider.uploadFile(FilePath);
   }
 
-  async getFileLink(fileName: string) {}
+  async getSignedURL(fileName: string) {
+    return await this.provider.getSignedURL(fileName);
+  }
 }

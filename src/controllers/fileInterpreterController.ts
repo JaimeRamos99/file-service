@@ -15,7 +15,7 @@ export async function fileInterpreterController(req: Request, res: Response, nex
 
     res.send(response);
   } catch (err) {
-    console.error('Error uploading file:', err);
+    console.error('Error extracting file attributes:', err);
     res.status(500).send({ error: true, message: 'Internal server error' });
   }
 }
