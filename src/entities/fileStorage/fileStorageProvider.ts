@@ -1,6 +1,6 @@
 export interface IFileStorageProvider {
-  uploadFile(filePath: string): Promise<void>;
-  getFileLink(): Promise<string>;
+  uploadFile(filePath: string): Promise<string>;
+  getFileLink(fileName: string): Promise<string>;
   deleteFile(): Promise<void>;
 }
 
