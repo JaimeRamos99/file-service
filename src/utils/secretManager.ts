@@ -1,6 +1,7 @@
 import { cleanEnv, json, num, str } from 'envalid';
 
 export const env = cleanEnv(process.env, {
+  FILES_MANAGER_CLIENT_SERVICE_KEY: json(),
   GCP_DOCUMENTAI_LOCATION: str(),
   GCP_DOCUMENTAI_PROCESSOR_ID: str(),
   GCP_PROJECT_ID: str(),

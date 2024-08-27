@@ -4,8 +4,8 @@ import { fileInterpreterController, fileUploadController } from '../controllers'
 
 const filesRouter = express.Router();
 
+filesRouter.get('/:id/link');
 filesRouter.post('/upload', upload.single('file'), validateFileUpload, fileUploadController);
-
 filesRouter.post('/extract-attributes', upload.single('file'), validateFileUpload, fileInterpreterController);
 
 export default filesRouter;
