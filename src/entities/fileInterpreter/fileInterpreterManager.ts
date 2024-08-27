@@ -7,6 +7,6 @@ export default class FileInterpreterManager {
   }
 
   async processFile(FilePath: string) {
-    await this.interpreter.extractDocumentFields(FilePath);
+    return await this.interpreter.extractDocumentFields(FilePath);
   }
 }

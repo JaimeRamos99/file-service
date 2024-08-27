@@ -22,14 +22,21 @@ filesRouter.post('/upload', upload.single('file'), validateFileUpload, async (re
 });
 
 filesRouter.post('/extract-attributes', upload.single('file'), validateFileUpload, async (req, res) => {
-  const filePath = req.file!.path;
+  try {
+    const filePath = req.file!.path;
 
-  // extract file attributes
-  const fileInterpreterManager = new FileInterpreterManager(new GCPDocumentAI());
-  await fileInterpreterManager.processFile(filePath);
+    // extract file attributes
+    const fileInterpreterManager = new FileInterpreterManager(new GCPDocumentAI());
+    const response = await fileInterpreterManager.processFile(filePath);
 
-  // delete local file
-  deleteFile(filePath);
+    // delete local file
+    deleteFile(filePath);
+
+    res.send(response);
+  } catch (err) {
+    console.error('Error uploading file:', err);
+    res.status(500).send({ error: true, message: 'Internal server error' });
+  }
 });
 
 export default filesRouter;
