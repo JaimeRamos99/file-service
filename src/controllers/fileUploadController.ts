@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { FileStorageManager, GCSStorageProvider } from '../entities/fileStorage';
+import { deleteFile } from '../utils';
 
 export async function fileUploadController(req: Request, res: Response, next: NextFunction) {
   try {
@@ -8,6 +9,9 @@ export async function fileUploadController(req: Request, res: Response, next: Ne
     // upload file to cloud provider
     const fileStorageManager = new FileStorageManager(new GCSStorageProvider());
     const fileName = await fileStorageManager.uploadFile(filePath);
+
+    // delete local file
+    deleteFile(filePath);
 
     res.status(200).send({ error: false, message: 'File uploaded successfully', body: { fileName } });
   } catch (err) {

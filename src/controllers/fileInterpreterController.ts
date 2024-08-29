@@ -13,7 +13,7 @@ export async function fileInterpreterController(req: Request, res: Response, nex
     // delete local file
     deleteFile(filePath);
 
-    res.send(response);
+    res.status(200).send({ error: false, body: response });
   } catch (err) {
     console.error('Error extracting file attributes:', err);
     res.status(500).send({ error: true, message: 'Internal server error' });
