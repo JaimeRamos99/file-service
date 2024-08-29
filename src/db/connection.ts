@@ -1,23 +1,18 @@
-import knex from 'knex';
+import Knex, { Knex as KnexType } from 'knex';
 import knexConfig from './knexfile';
 import { env } from '../utils';
 
-// Assume the environment is 'development' for setups
 const environment = env.NODE_ENV || 'development';
 const config = knexConfig[environment];
 
-// Initialize Knex
-const db = knex(config);
+let instance: KnexType | undefined;
 
-// Example query function
-export async function fetchAllFiles() {
-  try {
-    const files = await db.select('*').from('files');
-    console.log('Files:', files);
-  } catch (error) {
-    console.error('Error fetching files:', error);
-  } finally {
-    // Be sure to close the connection when no longer needed
-    await db.destroy();
+// Function to get or create a Knex instance
+function getKnexInstance() {
+  if (!instance) {
+    instance = Knex(config);
   }
+  return instance;
 }
+
+module.exports = getKnexInstance;

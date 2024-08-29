@@ -1,11 +1,17 @@
 import express from 'express';
 import { upload, validateFileUpload } from '../middlewares';
-import { fileInterpreterController, fileUploadController, fileSignedURLController } from '../controllers';
+import { FileController } from '../controllers';
 
 const filesRouter = express.Router();
+const fileController = new FileController();
 
-filesRouter.get('/:fileName/signed-url', fileSignedURLController);
-filesRouter.post('/upload', upload.single('file'), validateFileUpload, fileUploadController);
-filesRouter.post('/extract-attributes', upload.single('file'), validateFileUpload, fileInterpreterController);
+filesRouter.get('/:fileName/signed-url', fileController.getSignedURL);
+filesRouter.post('/upload', upload.single('file'), validateFileUpload, fileController.uploadFile);
+filesRouter.post(
+  '/extract-attributes',
+  upload.single('file'),
+  validateFileUpload,
+  fileController.extractFileAttributes,
+);
 
 export default filesRouter;
