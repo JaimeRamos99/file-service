@@ -10,7 +10,6 @@ export class FileTripEventRepository implements IFileTripEventRepository {
   private tableName = 'FilesTripsEvents';
 
   async create(fileTripEventData: IFileTripEvent) {
-    console.log(fileTripEventData);
     await knexInstance<IFileTripEvent, IFileTripEvent>(this.tableName).insert(fileTripEventData);
   }
 }
