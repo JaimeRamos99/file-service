@@ -29,14 +29,12 @@ export default class FileController {
   });
 
   public uploadFile = wrapAsyncController(async (req: Request, res: Response) => {
-    const file = req.file!;
-    const filePath = file.path;
+    const { file, body } = req;
+    const { trip_id, trip_event_id } = body;
 
-    const [newFile] = await Promise.all([
-      this.fileService.saveFile(file),
-      this.fileStorageManager.uploadFile(filePath),
-    ]);
+    const newFile = await this.fileService.uploadAndSaveFile(file!, { trip_id, trip_event_id });
 
+    const filePath = file!.path;
     deleteFile(filePath);
 
     res.status(200).send({ error: false, message: 'File uploaded successfully', body: newFile });

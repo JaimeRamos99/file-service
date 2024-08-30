@@ -1,5 +1,5 @@
 import { getKnexInstance } from '../db/connection';
-import { IFile } from '../entities/file';
+import { IFile } from '../entities';
 
 export interface IFileRepository {
   getFileByName(fileName: string): Promise<IFile | undefined>;
