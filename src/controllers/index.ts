@@ -1,3 +1,1 @@
-export * from './fileInterpreterController';
-export * from './fileUploadController';
-export * from './fileSignedURLController';
+export { default as FileController } from './fileController';
