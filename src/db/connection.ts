@@ -7,12 +7,9 @@ const config = knexConfig[environment];
 
 let instance: KnexType | undefined;
 
-// Function to get or create a Knex instance
-function getKnexInstance() {
+export function getKnexInstance() {
   if (!instance) {
     instance = Knex(config);
   }
   return instance;
 }
-
-module.exports = getKnexInstance;

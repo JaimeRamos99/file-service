@@ -1,5 +1,5 @@
 import { FileService } from '../services';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileInterpreterManager, GCPDocumentAI } from '../integrations/fileInterpreter';
 import { deleteFile } from '../utils';
@@ -29,12 +29,17 @@ export default class FileController {
   });
 
   public uploadFile = wrapAsyncController(async (req: Request, res: Response) => {
-    const filePath = req.file!.path;
-    const fileName = await this.fileStorageManager.uploadFile(filePath);
+    const file = req.file!;
+    const filePath = file.path;
+
+    const [newFile] = await Promise.all([
+      this.fileService.saveFile(file),
+      this.fileStorageManager.uploadFile(filePath),
+    ]);
 
     deleteFile(filePath);
 
-    res.status(200).send({ error: false, message: 'File uploaded successfully', body: { fileName } });
+    res.status(200).send({ error: false, message: 'File uploaded successfully', body: newFile });
   });
 
   public extractFileAttributes = wrapAsyncController(async (req: Request, res: Response) => {
