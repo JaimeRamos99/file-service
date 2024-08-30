@@ -9,10 +9,12 @@
     "dev": "doppler run --command='nodemon'",
     "lint:check": "npx prettier . --check",
     "lint:write": "npx prettier . --write",
-    "db:make-migration": "npx knex migrate:make --knexfile=./src/db/knexfile.ts",
-    "db:migrate": "npx knex migrate:latest --knexfile=./src/db/knexfile.ts",
-    "db:migration-status": "npx knex migrate:status --knexfile=./src/db/knexfile.ts --env=development",
-    "db:rollback": "npx knex migrate:rollback --knexfile=./src/db/knexfile.ts"
+    "db:make-migration": "doppler run --command='npx knex migrate:make --knexfile=./src/db/knexfile.ts $1'",
+    "db:migrate": "doppler run --command='npx knex migrate:latest --knexfile=./src/db/knexfile.ts'",
+    "db:migration-status": "doppler run --command='npx knex migrate:status --knexfile=./src/db/knexfile.ts --env=development'",
+    "db:rollback": "doppler run --command='npx knex migrate:rollback --knexfile=./src/db/knexfile.ts'",
+    "db:make-seed": "doppler run --command='npx knex seed:make $npm_config_seedname --knexfile=./src/db/knexfile.ts'",
+    "db:run-seed": "doppler run --command='npx knex seed:run --knexfile=./src/db/knexfile.ts'"
   },
   "repository": {
     "type": "git",
