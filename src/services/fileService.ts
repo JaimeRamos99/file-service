@@ -1,4 +1,4 @@
-import { IFile } from '../entities';
+import { IFile, UploadInput } from '../entities';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileRepository, FileTripEventRepository } from '../repositories';
 
@@ -12,7 +12,7 @@ class FileService {
     return file ? true : false;
   }
 
-  async uploadAndSaveFile(file: Express.Multer.File, tripData: any): Promise<IFile> {
+  async uploadAndSaveFile(file: Express.Multer.File, tripData: UploadInput): Promise<IFile> {
     const { filename, mimetype, size, path } = file;
     const fileData: IFile = {
       file_name: filename,

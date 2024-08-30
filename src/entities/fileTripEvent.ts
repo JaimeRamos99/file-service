@@ -8,3 +8,5 @@ export interface IFileTripEvent {
   created_by?: string;
   updated_by?: string;
 }
+
+export type UploadInput = Pick<IFileTripEvent, 'trip_id' | 'trip_event_id'>;
