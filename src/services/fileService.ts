@@ -12,11 +12,12 @@ class FileService {
     return file ? true : false;
   }
 
-  async uploadAndSaveFile(file: Express.Multer.File, tripData: UploadInput): Promise<IFile> {
+  async uploadAndSaveFile(file: Express.Multer.File, input: UploadInput): Promise<IFile> {
+    const { trip_id, trip_event_id, file_type } = input;
     const { filename, mimetype, size, path } = file;
     const fileData: IFile = {
       file_name: filename,
-      file_type: 'TBD',
+      file_type,
       file_extension: mimetype,
       file_size: size,
     };
@@ -29,9 +30,8 @@ class FileService {
     if (newFile.file_id) {
       const fileTripEventData = {
         file_id: newFile.file_id,
-        created_by: '80d327c4-fe48-472e-ae56-244e27b993cf',
-        updated_by: '80d327c4-fe48-472e-ae56-244e27b993cf',
-        ...tripData,
+        trip_id,
+        trip_event_id,
       };
       await this.fileTripEventRepository.create(fileTripEventData);
     }

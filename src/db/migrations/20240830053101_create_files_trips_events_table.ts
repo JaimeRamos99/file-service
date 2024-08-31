@@ -8,8 +8,8 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid('trip_event_id').nullable().references('event_id').inTable('trip_events').onDelete('CASCADE');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
-    table.uuid('created_by').notNullable().references('user_id').inTable('users').onDelete('SET NULL');
-    table.uuid('updated_by').notNullable().references('user_id').inTable('users').onDelete('SET NULL');
+    table.uuid('created_by').references('user_id').inTable('users').onDelete('SET NULL');
+    table.uuid('updated_by').references('user_id').inTable('users').onDelete('SET NULL');
   });
 }
 
