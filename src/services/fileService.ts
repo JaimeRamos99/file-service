@@ -13,11 +13,11 @@ class FileService {
   }
 
   async uploadAndSaveFile(file: Express.Multer.File, input: UploadInput): Promise<IFile> {
-    const { trip_id, trip_event_id, file_type } = input;
+    const { trip_id, trip_event_id, file_type_id } = input;
     const { filename, mimetype, size, path } = file;
     const fileData: IFile = {
       file_name: filename,
-      file_type,
+      file_type_id,
       file_extension: mimetype,
       file_size: size,
     };

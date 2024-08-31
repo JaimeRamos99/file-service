@@ -11,4 +11,4 @@ export interface IFileTripEvent {
   updated_by?: string;
 }
 
-export type UploadInput = Pick<IFileTripEvent, 'trip_id' | 'trip_event_id'> & { file_type: FileTypes };
+export type UploadInput = Pick<IFileTripEvent, 'trip_id' | 'trip_event_id'> & { file_type_id: string };

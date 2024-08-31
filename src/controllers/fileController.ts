@@ -2,7 +2,7 @@ import { FileService } from '../services';
 import { Request, Response } from 'express';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileInterpreterManager, GCPDocumentAI } from '../integrations/fileInterpreter';
-import { deleteFile, isValidFileType } from '../utils';
+import { deleteFile } from '../utils';
 import { wrapAsyncController } from './wrapAsyncController';
 import { UploadInput } from '../entities';
 
@@ -31,13 +31,9 @@ export default class FileController {
 
   public uploadFile = wrapAsyncController(async (req: Request, res: Response) => {
     const { file, body } = req;
-    const { trip_id, trip_event_id, file_type }: UploadInput = body;
+    const { trip_id, trip_event_id, file_type_id }: UploadInput = body;
 
-    if (!isValidFileType(file_type)) {
-      throw new Error(`Invalid file type: ${file_type}`);
-    }
-
-    const newFile = await this.fileService.uploadAndSaveFile(file!, { trip_id, trip_event_id, file_type });
+    const newFile = await this.fileService.uploadAndSaveFile(file!, { trip_id, trip_event_id, file_type_id });
 
     const filePath = file!.path;
     deleteFile(filePath);

@@ -4,7 +4,12 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('files', function (table) {
     table.uuid('file_id').primary().defaultTo(knex.raw('gen_random_uuid()'));
     table.string('file_name', 255).notNullable();
-    table.string('file_type', 20);
+    table
+      .uuid('file_type_id')
+      .notNullable()
+      .references('file_type_id')
+      .inTable('file_types')
+      .onDelete('RESTRICT');
     table.string('file_extension', 20);
     table.integer('file_size');
     table.timestamp('created_at').defaultTo(knex.fn.now());
