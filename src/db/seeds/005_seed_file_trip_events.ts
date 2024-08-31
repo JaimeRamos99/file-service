@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 
 export async function seed(knex: Knex): Promise<void> {
-  await knex('FilesTripsEvents').del();
+  await knex('files_trips_events_map').del();
 
   const file1 = await knex('files')
     .where({
@@ -23,9 +23,9 @@ export async function seed(knex: Knex): Promise<void> {
     throw new Error('Required related records not found');
   }
 
-  await knex('FilesTripsEvents').insert([
+  await knex('files_trips_events_map').insert([
     {
-      id: knex.raw('gen_random_uuid()'),
+      file_trip_event_id: knex.raw('gen_random_uuid()'),
       file_id: file1.file_id,
       trip_id: trip1.trip_id,
       trip_event_id: null,
@@ -35,7 +35,7 @@ export async function seed(knex: Knex): Promise<void> {
       updated_by: trip1.user_id,
     },
     {
-      id: knex.raw('gen_random_uuid()'),
+      file_trip_event_id: knex.raw('gen_random_uuid()'),
       file_id: file1.file_id,
       trip_id: null,
       trip_event_id: tripEvent1.event_id,
