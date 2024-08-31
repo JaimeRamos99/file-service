@@ -1,5 +1,5 @@
 export interface IFileTripEvent {
-  id?: string;
+  file_trip_event_id?: string;
   file_id?: string;
   trip_id?: string;
   trip_event_id?: string;

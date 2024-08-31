@@ -29,6 +29,8 @@ class FileService {
     if (newFile.file_id) {
       const fileTripEventData = {
         file_id: newFile.file_id,
+        created_by: '80d327c4-fe48-472e-ae56-244e27b993cf',
+        updated_by: '80d327c4-fe48-472e-ae56-244e27b993cf',
         ...tripData,
       };
       await this.fileTripEventRepository.create(fileTripEventData);
