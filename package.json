@@ -9,7 +9,7 @@
     "dev": "doppler run --command='nodemon'",
     "lint:check": "npx prettier . --check",
     "lint:write": "npx prettier . --write",
-    "db:make-migration": "doppler run --command='npx knex migrate:make --knexfile=./src/db/knexfile.ts $1'",
+    "db:make-migration": "doppler run --command='npx knex migrate:make --knexfile=./src/db/knexfile.ts $npm_config_migration'",
     "db:migrate": "doppler run --command='npx knex migrate:latest --knexfile=./src/db/knexfile.ts'",
     "db:migration-status": "doppler run --command='npx knex migrate:status --knexfile=./src/db/knexfile.ts --env=development'",
     "db:rollback": "doppler run --command='npx knex migrate:rollback --knexfile=./src/db/knexfile.ts'",
