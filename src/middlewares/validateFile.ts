@@ -1,12 +1,15 @@
 import multer, { FileFilterCallback } from 'multer';
 import { Request, Response, NextFunction } from 'express';
-import { env } from '../utils/secretManager';
+import { env } from '../utils/';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs';
 
 const allowedFileTypes: Record<string, string> = {
   '.pdf': 'application/pdf',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
 };
 
 // Directory to save the uploaded files
@@ -34,7 +37,7 @@ const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFil
   if (allowedFileTypes[ext] && allowedFileTypes[ext] === file.mimetype) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type, only PDF is allowed!'));
+    cb(new Error('Invalid file type!'));
   }
 };
 

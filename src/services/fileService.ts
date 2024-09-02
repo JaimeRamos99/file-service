@@ -1,4 +1,4 @@
-import { KnexAdapter } from '../db/adapters/knex/knexAdapter';
+import { KnexAdapter } from '../db/adapters/knex/';
 import { IFile, UploadInput } from '../entities';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileRepository, FileTripEventRepository } from '../repositories';
