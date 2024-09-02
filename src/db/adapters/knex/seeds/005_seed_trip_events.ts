@@ -13,11 +13,11 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries into the trip_events table
   await knex('trip_events').insert([
     {
-      event_id: knex.raw('gen_random_uuid()'),
+      trip_event_id: knex.raw('gen_random_uuid()'),
       event_name: 'Eiffel Tower Visit',
       event_type: 'Sightseeing',
-      start_time: new Date('2024-09-03T10:00:00Z'),
-      end_time: new Date('2024-09-03T12:00:00Z'),
+      initial_date: new Date('2024-09-03T10:00:00Z'),
+      end_date: new Date('2024-09-03T12:00:00Z'),
       location: 'Eiffel Tower, Paris',
       notes: "Don't forget to bring the binoculars.",
       company_name: 'Paris Tours Co.',
@@ -31,11 +31,11 @@ export async function seed(knex: Knex): Promise<void> {
       updated_at: knex.fn.now(),
     },
     {
-      event_id: knex.raw('gen_random_uuid()'),
+      trip_event_id: knex.raw('gen_random_uuid()'),
       event_name: 'Louvre Museum Tour',
       event_type: 'Cultural',
-      start_time: new Date('2024-09-05T14:00:00Z'),
-      end_time: new Date('2024-09-05T16:00:00Z'),
+      initial_date: new Date('2024-09-05T14:00:00Z'),
+      end_date: new Date('2024-09-05T16:00:00Z'),
       location: 'Louvre Museum, Paris',
       notes: 'Get tickets at the entrance.',
       company_name: 'Museums of Paris',

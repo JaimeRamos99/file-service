@@ -20,8 +20,8 @@ export async function seed(knex: Knex): Promise<void> {
       user_id: user1.user_id, // Replace with actual user UUIDs from your users table
       created_by: user1.user_id,
       updated_by: user1.user_id,
-      created_date: knex.fn.now(),
-      updated_date: knex.fn.now(),
+      created_at: knex.fn.now(),
+      updated_at: knex.fn.now(),
     },
     {
       trip_id: knex.raw('gen_random_uuid()'),
@@ -31,8 +31,8 @@ export async function seed(knex: Knex): Promise<void> {
       user_id: user1.user_id,
       created_by: user1.user_id,
       updated_by: user1.user_id,
-      created_date: knex.fn.now(),
-      updated_date: knex.fn.now(),
+      created_at: knex.fn.now(),
+      updated_at: knex.fn.now(),
     },
     {
       trip_id: knex.raw('gen_random_uuid()'),
@@ -42,8 +42,8 @@ export async function seed(knex: Knex): Promise<void> {
       user_id: user1.user_id,
       created_by: user1.user_id,
       updated_by: user1.user_id,
-      created_date: knex.fn.now(),
-      updated_date: knex.fn.now(),
+      created_at: knex.fn.now(),
+      updated_at: knex.fn.now(),
     },
   ]);
 }

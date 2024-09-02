@@ -1,10 +1,11 @@
+import { KnexAdapter } from '../db/adapters/knex/knexAdapter';
 import { IFile, UploadInput } from '../entities';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileRepository, FileTripEventRepository } from '../repositories';
 
 class FileService {
-  private fileRepository = new FileRepository();
-  private fileTripEventRepository = new FileTripEventRepository();
+  private fileRepository = new FileRepository(new KnexAdapter());
+  private fileTripEventRepository = new FileTripEventRepository(new KnexAdapter());
   private fileStorageManager = new FileStorageManager(new GCSStorageProvider());
 
   async fileExists(fileName: string): Promise<boolean> {

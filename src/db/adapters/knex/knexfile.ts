@@ -1,4 +1,4 @@
-import { env } from '../utils';
+import { env } from '../../../utils';
 import type { Knex } from 'knex';
 
 const knexConfig: { [key: string]: Knex.Config } = {
