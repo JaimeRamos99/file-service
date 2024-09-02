@@ -5,7 +5,13 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid('file_trip_event_id').primary().defaultTo(knex.raw('gen_random_uuid()'));
     table.uuid('file_id').notNullable().references('file_id').inTable('files').onDelete('CASCADE');
     table.uuid('trip_id').nullable().references('trip_id').inTable('trips').onDelete('CASCADE');
-    table.uuid('trip_event_id').nullable().references('event_id').inTable('trip_events').onDelete('CASCADE');
+    table
+      .uuid('trip_event_id')
+      .nullable()
+      .references('trip_event_id')
+      .inTable('trip_events')
+      .onDelete('CASCADE');
+    table.boolean('is_deleted').defaultTo(false);
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.uuid('created_by').references('user_id').inTable('users').onDelete('SET NULL');

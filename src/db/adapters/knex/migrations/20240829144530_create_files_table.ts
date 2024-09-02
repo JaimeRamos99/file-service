@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<void> {
       .references('file_type_id')
       .inTable('file_types')
       .onDelete('RESTRICT');
+    table.boolean('is_deleted').defaultTo(false);
     table.string('file_extension', 20);
     table.integer('file_size');
     table.timestamp('created_at').defaultTo(knex.fn.now());

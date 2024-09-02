@@ -38,7 +38,7 @@ export async function seed(knex: Knex): Promise<void> {
       file_trip_event_id: knex.raw('gen_random_uuid()'),
       file_id: file1.file_id,
       trip_id: null,
-      trip_event_id: tripEvent1.event_id,
+      trip_event_id: tripEvent1.trip_event_id,
       created_at: knex.fn.now(),
       updated_at: knex.fn.now(),
       created_by: trip1.user_id,
