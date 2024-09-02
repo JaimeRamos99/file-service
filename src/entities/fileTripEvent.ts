@@ -1,5 +1,3 @@
-import { FileTypes } from './fileType';
-
 export interface IFileTripEvent {
   file_trip_event_id?: string;
   file_id?: string;

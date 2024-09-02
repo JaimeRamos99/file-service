@@ -6,5 +6,5 @@ export interface IFileStorageProvider {
 
 export interface IStorageConfig {
   bucketName: string;
-  options: Record<string, any>;
+  options: Record<string, string>;
 }

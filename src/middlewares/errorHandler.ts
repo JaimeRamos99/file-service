@@ -1,6 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+interface CustomError extends Error {
+  status?: number;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function errorHandler(err: CustomError, req: Request, res: Response, _next: NextFunction) {
   console.error('Error:', err.message);
   console.error(err.stack);
 
