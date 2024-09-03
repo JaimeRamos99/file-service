@@ -1,1 +1,1 @@
-export * from './databaseAdapter.interface';
+export * from './databaseAdapter';
