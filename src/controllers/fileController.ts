@@ -2,30 +2,43 @@ import { FileService } from '../services';
 import { Request, Response } from 'express';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileInterpreterManager, GCPDocumentAI } from '../integrations/fileInterpreter';
-import { deleteFile } from '../utils';
+import { deleteFile, env } from '../utils';
 import { wrapAsyncController } from './wrapAsyncController';
 import { UploadInput } from '../entities';
+import { ICacheAdapter } from '../cache/adapters';
 
 export default class FileController {
   private fileService: FileService;
   private fileStorageManager: FileStorageManager;
   private fileInterpreterManager: FileInterpreterManager;
+  private cache: ICacheAdapter;
 
-  constructor() {
+  constructor(cache: ICacheAdapter) {
     this.fileService = new FileService();
     this.fileStorageManager = new FileStorageManager(new GCSStorageProvider());
     this.fileInterpreterManager = new FileInterpreterManager(new GCPDocumentAI());
+    this.cache = cache;
   }
 
   public getSignedURL = wrapAsyncController(async (req: Request, res: Response) => {
     const { fileName } = req.params;
+
     const fileExist = await this.fileService.fileExists(fileName);
     if (!fileExist) {
       res.status(404).send({ error: true, message: 'File not found' });
       return;
     }
 
+    const cachedSignedURL = await this.cache.get(fileName);
+    if (cachedSignedURL) {
+      res
+        .status(200)
+        .send({ error: false, message: 'Returning cache URL', body: { signedURL: cachedSignedURL } });
+      return;
+    }
+
     const signedURL = await this.fileStorageManager.getSignedURL(fileName);
+    await this.cache.set(fileName, signedURL, env.CACHE_TTL_MS_SIGNED_URL);
     res.status(200).send({ error: false, message: 'Signed URL succesfully generated', body: { signedURL } });
   });
 
