@@ -1,11 +1,20 @@
 import { ICacheAdapter } from '../';
-import redis from 'redis';
+import { createClient } from 'redis';
 
 export class RedisCacheAdapter implements ICacheAdapter {
   private client;
 
   constructor() {
-    this.client = redis.createClient();
+    this.client = createClient();
+    this.connectClient();
+  }
+
+  private async connectClient(): Promise<void> {
+    try {
+      await this.client.connect();
+    } catch (error) {
+      console.error('Failed to connect to Redis:', error);
+    }
   }
 
   async get(key: string): Promise<string | null> {
