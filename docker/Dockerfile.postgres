@@ -1,11 +1,14 @@
-# Use the official Redis image as a base
-FROM redis:latest
+# Use the official PostgreSQL image as a base
+FROM postgres:latest
 
-# Set the working directory to /usr/src/redis (optional)
-WORKDIR /usr/src/redis
+# Set the working directory (optional)
+WORKDIR /usr/src/postgres
 
-# Expose the Redis default port
-EXPOSE 6379
+# Expose the PostgreSQL default port
+EXPOSE 5432
 
-# Start Redis server when the container starts
-CMD ["redis-server"]
+# The default environment variables for user, password, and database can be passed dynamically at runtime,
+# so they are not hard-coded in the Dockerfile. You can pass them via `docker run` or a .env file.
+
+# Start PostgreSQL server when the container starts
+CMD ["postgres"]
