@@ -1,4 +1,4 @@
-import { IDatabaseAdapter } from '../db/adapters';
+import { getKnexInstance } from '../db/knex';
 import { IFileTripEvent } from '../entities';
 
 export interface IFileTripEventRepository {
@@ -6,9 +6,9 @@ export interface IFileTripEventRepository {
 }
 export class FileTripEventRepository implements IFileTripEventRepository {
   private tableName = 'files_trips_events_map';
-  constructor(private dbAdapter: IDatabaseAdapter<IFileTripEvent>) {}
+  private knex = getKnexInstance();
 
   async create(fileTripEventData: IFileTripEvent): Promise<void> {
-    await this.dbAdapter.insert(this.tableName, fileTripEventData);
+    await this.knex<IFileTripEvent>(this.tableName).insert(fileTripEventData);
   }
 }

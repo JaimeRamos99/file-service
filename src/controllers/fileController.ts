@@ -21,15 +21,15 @@ export default class FileController {
   }
 
   public getSignedURL = wrapAsyncController(async (req: Request, res: Response) => {
-    const { fileName } = req.params;
+    const { fileUniqueName } = req.params;
 
-    const fileExist = await this.fileService.fileExists(fileName);
+    const fileExist = await this.fileService.fileExists(fileUniqueName);
     if (!fileExist) {
       res.status(404).send({ error: true, message: 'File not found' });
       return;
     }
 
-    const cachedSignedURL = await this.cache.get(fileName);
+    const cachedSignedURL = await this.cache.get(fileUniqueName);
     if (cachedSignedURL) {
       res
         .status(200)
@@ -37,8 +37,8 @@ export default class FileController {
       return;
     }
 
-    const signedURL = await this.fileStorageManager.getSignedURL(fileName);
-    await this.cache.set(fileName, signedURL, env.CACHE_TTL_MS_SIGNED_URL);
+    const signedURL = await this.fileStorageManager.getSignedURL(fileUniqueName);
+    await this.cache.set(fileUniqueName, signedURL, env.CACHE_TTL_MS_SIGNED_URL);
     res.status(200).send({ error: false, message: 'Signed URL succesfully generated', body: { signedURL } });
   });
 

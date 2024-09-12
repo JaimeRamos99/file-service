@@ -1,20 +1,23 @@
-import { IDatabaseAdapter } from '../db/adapters';
+import { getKnexInstance } from '../db/knex';
 import { IFile } from '../entities';
 
 export interface IFileRepository {
-  getFileByName(fileName: string): Promise<IFile | undefined>;
+  getFileByUniqueName(fileUniqueName: string): Promise<IFile | undefined>;
   saveFile(file: IFile): Promise<IFile>;
 }
 
 export class FileRepository implements IFileRepository {
   private tableName = 'files';
+  private knex = getKnexInstance();
 
-  constructor(private dbAdapter: IDatabaseAdapter<IFile>) {}
-  getFileByName(fileName: string): Promise<IFile | undefined> {
-    return this.dbAdapter.findOne(this.tableName, { file_name: fileName });
+  async getFileByUniqueName(fileUniqueName: string): Promise<IFile | undefined> {
+    return this.knex<IFile>(this.tableName).where({ file_unique_name: fileUniqueName }).first();
   }
 
   async saveFile(file: IFile): Promise<IFile> {
-    return this.dbAdapter.insert(this.tableName, file);
+    const [result] = await this.knex<IFile, IFile>(this.tableName).insert(file).returning('*');
+    return result;
   }
+
+  async checkFileExistence() {}
 }

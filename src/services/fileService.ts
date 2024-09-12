@@ -1,4 +1,3 @@
-import { KnexAdapter } from '../db/adapters/knex/';
 import { IFile, UploadInput } from '../entities';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileRepository, FileTripEventRepository } from '../repositories';
@@ -7,12 +6,12 @@ import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 
 class FileService {
-  private fileRepository = new FileRepository(new KnexAdapter());
-  private fileTripEventRepository = new FileTripEventRepository(new KnexAdapter());
+  private fileRepository = new FileRepository();
+  private fileTripEventRepository = new FileTripEventRepository();
   private fileStorageManager = new FileStorageManager(new GCSStorageProvider());
 
   async fileExists(fileName: string): Promise<boolean> {
-    const file = await this.fileRepository.getFileByName(fileName);
+    const file = await this.fileRepository.getFileByUniqueName(fileName);
     return file ? true : false;
   }
 
