@@ -6,8 +6,8 @@ export default class FileStorageManager {
     this.provider = provider;
   }
 
-  async uploadFile(FilePath: string): Promise<void> {
-    await this.provider.uploadFile(FilePath);
+  async uploadFile(fileBuffer: Buffer, fileName: string): Promise<void> {
+    await this.provider.uploadFile(fileBuffer, fileName);
   }
 
   async getSignedURL(fileName: string) {

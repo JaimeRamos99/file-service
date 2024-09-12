@@ -1,2 +1,2 @@
-export * from './validateFile';
+export * from './fileHandler';
 export * from './errorHandler';

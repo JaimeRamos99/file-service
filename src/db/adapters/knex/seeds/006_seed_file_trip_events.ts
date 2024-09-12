@@ -5,7 +5,7 @@ export async function seed(knex: Knex): Promise<void> {
 
   const file1 = await knex('files')
     .where({
-      file_name: 'document.pdf',
+      file_original_name: 'document.pdf',
     })
     .first();
   const trip1 = await knex('trips')

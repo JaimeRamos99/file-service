@@ -2,6 +2,9 @@ import { KnexAdapter } from '../db/adapters/knex/';
 import { IFile, UploadInput } from '../entities';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileRepository, FileTripEventRepository } from '../repositories';
+import { createHash } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
 
 class FileService {
   private fileRepository = new FileRepository(new KnexAdapter());
@@ -15,17 +18,27 @@ class FileService {
 
   async uploadAndSaveFile(file: Express.Multer.File, input: UploadInput): Promise<IFile> {
     const { trip_id, trip_event_id, file_type_id } = input;
-    const { filename, mimetype, size, path } = file;
+    const { mimetype, size, buffer, originalname } = file;
+
+    const ext = path.extname(originalname).toLowerCase();
+    const baseName = path.basename(originalname, ext).replace(/[^a-zA-Z0-9_.-]/g, '');
+
+    const uniqueName = `${uuidv4()}_${baseName}${ext}`;
+
+    const fileHash = createHash('sha256').update(buffer).digest('hex');
+
     const fileData: IFile = {
-      file_name: filename,
+      file_original_name: originalname,
+      file_unique_name: uniqueName,
       file_type_id,
       file_extension: mimetype,
       file_size: size,
+      file_hash: fileHash,
     };
 
     const [newFile] = await Promise.all([
       this.fileRepository.saveFile(fileData),
-      this.fileStorageManager.uploadFile(path),
+      this.fileStorageManager.uploadFile(buffer, uniqueName),
     ]);
 
     if (newFile.file_id) {

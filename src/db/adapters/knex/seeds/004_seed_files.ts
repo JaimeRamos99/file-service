@@ -20,21 +20,25 @@ export async function seed(knex: Knex): Promise<void> {
   await knex('files').insert([
     {
       file_id: knex.raw('gen_random_uuid()'),
-      file_name: 'document.pdf',
+      file_original_name: 'document.pdf',
+      file_unique_name: '01_document.pdf',
       file_type_id: fileType1.file_type_id,
       file_extension: 'pdf',
       file_size: 2048000, // size in bytes
+      file_hash: 'testing hash',
       created_at: knex.fn.now(),
       updated_at: knex.fn.now(),
-      created_by: user1.user_id, // Replace with actual user UUIDs
-      updated_by: user1.user_id, // Replace with actual user UUIDs
+      created_by: user1.user_id,
+      updated_by: user1.user_id,
     },
     {
       file_id: knex.raw('gen_random_uuid()'),
-      file_name: 'image.jpg',
+      file_original_name: 'image.jpg',
+      file_unique_name: '01_image.jpg',
       file_type_id: fileType1.file_type_id,
       file_extension: 'jpg',
       file_size: 1024000,
+      file_hash: 'testing hash',
       created_at: knex.fn.now(),
       updated_at: knex.fn.now(),
       created_by: user1.user_id,
@@ -42,15 +46,16 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       file_id: knex.raw('gen_random_uuid()'),
-      file_name: 'spreadsheet.xls',
+      file_original_name: 'spreadsheet.xls',
+      file_unique_name: '01_spreadsheet.xls',
       file_type_id: fileType1.file_type_id,
       file_extension: 'xls',
       file_size: 512000,
+      file_hash: 'testing hash',
       created_at: knex.fn.now(),
       updated_at: knex.fn.now(),
       created_by: user1.user_id,
       updated_by: user1.user_id,
     },
-    // Add more entries as needed
   ]);
 }

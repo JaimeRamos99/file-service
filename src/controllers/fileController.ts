@@ -2,7 +2,7 @@ import { FileService } from '../services';
 import { Request, Response } from 'express';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileInterpreterManager, GCPDocumentAI } from '../integrations/fileInterpreter';
-import { deleteFile, env } from '../utils';
+import { env } from '../utils';
 import { wrapAsyncController } from './wrapAsyncController';
 import { UploadInput } from '../entities';
 import { ICacheAdapter } from '../cache/adapters';
@@ -48,17 +48,13 @@ export default class FileController {
 
     const newFile = await this.fileService.uploadAndSaveFile(file!, { trip_id, trip_event_id, file_type_id });
 
-    const filePath = file!.path;
-    deleteFile(filePath);
-
     res.status(200).send({ error: false, message: 'File uploaded successfully', body: newFile });
   });
 
   public extractFileAttributes = wrapAsyncController(async (req: Request, res: Response) => {
-    const filePath = req.file!.path;
-    const response = await this.fileInterpreterManager.processFile(filePath);
+    const { buffer } = req.file!;
 
-    deleteFile(filePath);
+    const response = await this.fileInterpreterManager.processFile(buffer);
 
     res.status(200).send({ error: false, body: response });
   });
