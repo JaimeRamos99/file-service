@@ -1,4 +1,4 @@
-import { IFile, UploadInput } from '../entities';
+import { IFile, FileUploadInput } from '../entities';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileRepository, FileTripEventRepository } from '../repositories';
 import { createHash } from 'crypto';
@@ -15,21 +15,27 @@ class FileService {
     return file ? true : false;
   }
 
-  async uploadAndSaveFile(file: Express.Multer.File, input: UploadInput): Promise<IFile> {
-    const { trip_id, trip_event_id, file_type_id } = input;
+  async uploadAndSaveFile(file: Express.Multer.File, input: FileUploadInput): Promise<IFile> {
+    const { tripId, tripEventId, fileTypeId } = input;
     const { mimetype, size, buffer, originalname } = file;
 
     const ext = path.extname(originalname).toLowerCase();
     const baseName = path.basename(originalname, ext).replace(/[^a-zA-Z0-9_.-]/g, '');
-
     const uniqueName = `${uuidv4()}_${baseName}${ext}`;
-
     const fileHash = createHash('sha256').update(buffer).digest('hex');
+
+    const fileHashCounts = await this.fileRepository.countFilesByHashAndTrip(fileHash, tripId, tripEventId);
+    if (isNaN(fileHashCounts)) {
+      throw new Error('Internal server error.');
+    }
+    if (fileHashCounts > 0) {
+      throw new Error('File already uploaded.');
+    }
 
     const fileData: IFile = {
       file_original_name: originalname,
       file_unique_name: uniqueName,
-      file_type_id,
+      file_type_id: fileTypeId,
       file_extension: mimetype,
       file_size: size,
       file_hash: fileHash,
@@ -43,8 +49,8 @@ class FileService {
     if (newFile.file_id) {
       const fileTripEventData = {
         file_id: newFile.file_id,
-        trip_id,
-        trip_event_id,
+        trip_id: fileTypeId,
+        trip_event_id: tripEventId,
       };
       await this.fileTripEventRepository.create(fileTripEventData);
     }

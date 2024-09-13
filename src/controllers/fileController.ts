@@ -4,7 +4,7 @@ import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStor
 import { FileInterpreterManager, GCPDocumentAI } from '../integrations/fileInterpreter';
 import { env } from '../utils';
 import { wrapAsyncController } from './wrapAsyncController';
-import { UploadInput } from '../entities';
+import { FileUploadInput } from '../entities';
 import { ICacheAdapter } from '../cache/adapters';
 
 export default class FileController {
@@ -44,9 +44,13 @@ export default class FileController {
 
   public uploadFile = wrapAsyncController(async (req: Request, res: Response) => {
     const { file, body } = req;
-    const { trip_id, trip_event_id, file_type_id }: UploadInput = body;
+    const { tripId, tripEventId, fileTypeId }: FileUploadInput = body;
 
-    const newFile = await this.fileService.uploadAndSaveFile(file!, { trip_id, trip_event_id, file_type_id });
+    const newFile = await this.fileService.uploadAndSaveFile(file!, {
+      tripId,
+      tripEventId,
+      fileTypeId,
+    });
 
     res.status(200).send({ error: false, message: 'File uploaded successfully', body: newFile });
   });
