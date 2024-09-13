@@ -2,10 +2,11 @@ import { FileService } from '../services';
 import { Request, Response } from 'express';
 import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
 import { FileInterpreterManager, GCPDocumentAI } from '../integrations/fileInterpreter';
-import { env } from '../utils';
+import { env, sendResponse } from '../utils';
 import { wrapAsyncController } from './wrapAsyncController';
 import { FileUploadInput } from '../entities';
 import { ICacheAdapter } from '../cache/adapters';
+import { StatusCodes } from 'http-status-codes';
 
 export default class FileController {
   private fileService: FileService;
@@ -20,29 +21,25 @@ export default class FileController {
     this.cache = cache;
   }
 
-  public getSignedURL = wrapAsyncController(async (req: Request, res: Response) => {
+  public getSignedURL = wrapAsyncController(async (req: Request, res: Response): Promise<Response> => {
     const { fileUniqueName } = req.params;
 
     const fileExist = await this.fileService.fileExists(fileUniqueName);
     if (!fileExist) {
-      res.status(404).send({ error: true, message: 'File not found' });
-      return;
+      return sendResponse(res, StatusCodes.NOT_FOUND, 'File not found', null, true);
     }
 
     const cachedSignedURL = await this.cache.get(fileUniqueName);
     if (cachedSignedURL) {
-      res
-        .status(200)
-        .send({ error: false, message: 'Returning cache URL', body: { signedURL: cachedSignedURL } });
-      return;
+      return sendResponse(res, StatusCodes.OK, 'Returning cached URL', { signedURL: cachedSignedURL }, false);
     }
 
     const signedURL = await this.fileStorageManager.getSignedURL(fileUniqueName);
     await this.cache.set(fileUniqueName, signedURL, env.CACHE_TTL_MS_SIGNED_URL);
-    res.status(200).send({ error: false, message: 'Signed URL succesfully generated', body: { signedURL } });
+    return sendResponse(res, StatusCodes.OK, 'Signed URL succesfully generated', { signedURL }, false);
   });
 
-  public uploadFile = wrapAsyncController(async (req: Request, res: Response) => {
+  public uploadFile = wrapAsyncController(async (req: Request, res: Response): Promise<Response> => {
     const { file, body } = req;
     const { tripId, tripEventId, fileTypeId }: FileUploadInput = body;
 
@@ -51,15 +48,15 @@ export default class FileController {
       tripEventId,
       fileTypeId,
     });
-
-    res.status(200).send({ error: false, message: 'File uploaded successfully', body: newFile });
+    return sendResponse(res, StatusCodes.OK, 'File uploaded successfully', newFile, false);
   });
 
-  public extractFileAttributes = wrapAsyncController(async (req: Request, res: Response) => {
-    const { buffer } = req.file!;
+  public extractFileAttributes = wrapAsyncController(
+    async (req: Request, res: Response): Promise<Response> => {
+      const { buffer } = req.file!;
 
-    const response = await this.fileInterpreterManager.processFile(buffer);
-
-    res.status(200).send({ error: false, body: response });
-  });
+      const response = await this.fileInterpreterManager.processFile(buffer);
+      return sendResponse(res, StatusCodes.OK, 'Attributes extracted succesfully', response, false);
+    },
+  );
 }

@@ -4,6 +4,8 @@ import { FileRepository, FileTripEventRepository } from '../repositories';
 import { createHash } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
+import { CustomError } from '../middlewares';
+import { StatusCodes } from 'http-status-codes';
 
 class FileService {
   private fileRepository = new FileRepository();
@@ -26,10 +28,10 @@ class FileService {
 
     const fileHashCounts = await this.fileRepository.countFilesByHashAndTrip(fileHash, tripId, tripEventId);
     if (isNaN(fileHashCounts)) {
-      throw new Error('Internal server error.');
+      throw new CustomError('Error checking file existence.', StatusCodes.INTERNAL_SERVER_ERROR);
     }
     if (fileHashCounts > 0) {
-      throw new Error('File already uploaded.');
+      throw new CustomError('File already uploaded.', StatusCodes.CONFLICT);
     }
 
     const fileData: IFile = {
