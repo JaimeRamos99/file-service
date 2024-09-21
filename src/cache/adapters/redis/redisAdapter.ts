@@ -1,5 +1,6 @@
 import { ICacheAdapter } from '../';
 import { createClient } from 'redis';
+import { Logger } from '../../../utils';
 
 export class RedisCacheAdapter implements ICacheAdapter {
   private client;
@@ -13,7 +14,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
     try {
       await this.client.connect();
     } catch (error) {
-      console.error('Failed to connect to Redis:', error);
+      Logger.error('Failed to connect to Redis:', error as Error);
     }
   }
 

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { Logger } from '../utils';
 
 export class CustomError extends Error {
   status: number;
@@ -16,8 +17,7 @@ export function errorHandler(err: CustomError, req: Request, res: Response, next
     return next(err);
   }
 
-  console.error('Error:', err.message);
-  console.error(err.stack);
+  Logger.error('Error:', err);
 
   const statusCode = err.status || StatusCodes.INTERNAL_SERVER_ERROR;
   const errorResponse = {
