@@ -13,5 +13,4 @@ export const env = cleanEnv(process.env, {
   GCSCONFIG: json<{ bucketName: string; options: Record<string, string> }>(),
   NODE_ENV: str(),
   PORT: num(),
-  UPLOAD_TEMP_FOLDER_NAME: str(),
 });
