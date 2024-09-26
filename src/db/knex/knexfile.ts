@@ -5,10 +5,11 @@ const knexConfig: { [key: string]: Knex.Config } = {
   development: {
     client: 'pg',
     connection: {
-      host: env.DB_HOST_DEV,
-      user: env.DB_USER_DEV,
-      password: env.DB_PASSWORD_DEV,
-      database: env.DB_NAME_DEV,
+      host: env.DB_HOST,
+      port: env.DB_PORT,
+      user: env.DB_USER,
+      password: env.DB_PASSWORD,
+      database: env.DB_NAME,
     },
     migrations: {
       directory: './migrations',

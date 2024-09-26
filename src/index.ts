@@ -9,6 +9,6 @@ app.use('/files', filesRouter);
 
 app.use(errorHandler);
 
-app.listen(env.PORT, () => {
-  Logger.info(`File service listening on port ${env.PORT}`);
+app.listen(env.FILE_SERVICE_PORT, () => {
+  Logger.info(`File service listening on port ${env.FILE_SERVICE_PORT}`);
 });

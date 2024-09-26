@@ -23,7 +23,7 @@
     "db:run-seed": "doppler run --command='npx knex seed:run --knexfile=./src/db/knex/knexfile.ts'",
     "db:setup": "doppler run --command='npm run db:migrate && npm run db:run-seed'",
     "db:reset": "doppler run --command='npm run db:rollback-all && npm run db:setup'",
-    "docker:start-redis": "docker build -f docker/Dockerfile.redis -t travel-app-redis ./empty_dir && docker run -d --name redis-server -p 6379:6379 my-redis",
+    "docker:start-redis": "docker build -f docker/Dockerfile.redis -t travel-app-redis ./empty_dir && docker run -d --name redis-server -p 6379:6379 travel-app-redis",
     "docker:start-postgres": "docker build -f docker/Dockerfile.postgres -t travel-app-postgres"
   },
   "repository": {
