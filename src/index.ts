@@ -5,6 +5,11 @@ import { errorHandler } from './middlewares';
 
 const app = express();
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).send({ status: 'UP' });
+});
+
 app.use('/files', filesRouter);
 
 app.use(errorHandler);
