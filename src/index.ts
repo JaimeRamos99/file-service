@@ -1,14 +1,15 @@
 import express from 'express';
 import { filesRouter } from './routes/';
 import { env, Logger } from './utils';
-import { errorHandler } from './middlewares';
-
+import { errorHandler, checkAuthToken } from './middlewares';
 const app = express();
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).send({ status: 'UP' });
 });
+
+app.use(checkAuthToken);
 
 app.use('/files', filesRouter);
 
