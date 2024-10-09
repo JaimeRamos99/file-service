@@ -1,13 +1,14 @@
 import express from 'express';
-import { filesRouter } from './routes/';
+import { filesRouter, healthRouter } from './routes/';
 import { env, Logger } from './utils';
 import { errorHandler, checkAuthToken } from './middlewares';
+import { swaggerUi, swaggerSpec } from '../swagger';
+
 const app = express();
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).send({ status: 'UP' });
-});
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use('/', healthRouter);
 
 app.use(checkAuthToken);
 
