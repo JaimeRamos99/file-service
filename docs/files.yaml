@@ -1,0 +1,155 @@
+# files.yaml
+paths:
+  /files/{fileUniqueName}/signed-url:
+    get:
+      tags:
+        - Files
+      summary: Get a signed URL for a file
+      description: Generates and returns a signed URL for a file if it exists, or returns a cached URL if available.
+      parameters:
+        - name: fileUniqueName
+          in: path
+          required: true
+          description: The unique name of the file to generate the signed URL for.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Signed URL successfully generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  signedURL:
+                    type: string
+                    description: The generated signed URL.
+              example:
+                signedURL: 'https://your-storage-service.com/signed-url/file.txt'
+        404:
+          description: File not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: boolean
+              example:
+                message: 'File not found'
+                error: true
+
+  /files/upload:
+    post:
+      tags:
+        - Files
+      summary: Upload a new file
+      description: Uploads a file and saves its details to the server.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload.
+                tripId:
+                  type: integer
+                  description: The ID of the trip associated with the file.
+                tripEventId:
+                  type: integer
+                  description: The ID of the trip event associated with the file.
+                fileTypeId:
+                  type: integer
+                  description: The type of file being uploaded.
+      responses:
+        200:
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    description: The newly uploaded file's details.
+              example:
+                message: 'File uploaded successfully'
+                data:
+                  id: 1
+                  fileName: 'uploaded-file.pdf'
+                  tripId: 123
+                  tripEventId: 456
+                  fileTypeId: 789
+        400:
+          description: Bad request. No file uploaded or invalid file type.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+              example:
+                error: true
+                message: 'No file uploaded.'
+
+  /files/extract-attributes:
+    post:
+      tags:
+        - Files
+      summary: Extract attributes from an uploaded file
+      description: Processes an uploaded file to extract its attributes.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to extract attributes from.
+      responses:
+        200:
+          description: Attributes extracted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    description: The extracted attributes from the file.
+              example:
+                message: 'Attributes extracted successfully'
+                data:
+                  attributes:
+                    key1: value1
+                    key2: value2
+        400:
+          description: Bad request. No file uploaded or unable to extract attributes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+              example:
+                error: true
+                message: 'No file uploaded.'

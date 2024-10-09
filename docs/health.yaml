@@ -1,0 +1,10 @@
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Returns a specific resource
+      description: Responds if the app is up and running
+      responses:
+        200:
+          description: Successful response
