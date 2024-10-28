@@ -51,9 +51,10 @@ class FileService {
     if (newFile.file_id) {
       const fileTripEventData = {
         file_id: newFile.file_id,
-        trip_id: fileTypeId,
+        trip_id: tripId,
         trip_event_id: tripEventId,
       };
+      console.log(fileTripEventData);
       await this.fileTripEventRepository.create(fileTripEventData);
     }
 
