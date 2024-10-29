@@ -1,7 +1,7 @@
 import { FileService } from '../services';
 import { Request, Response } from 'express';
-import { FileStorageManager, GCSStorageProvider } from '../integrations/fileStorage';
-import { FileInterpreterManager, GCPDocumentAI } from '../integrations/fileInterpreter';
+import { FileStorageManager } from '../integrations/fileStorage';
+import { FileInterpreterManager } from '../integrations/fileInterpreter';
 import { env, sendResponse } from '../utils';
 import { wrapAsyncController } from './wrapAsyncController';
 import { FileUploadInput } from '../entities';
@@ -9,15 +9,15 @@ import { ICacheAdapter } from '../cache/adapters';
 import { StatusCodes } from 'http-status-codes';
 
 export default class FileController {
-  private fileService: FileService;
-  private fileStorageManager: FileStorageManager;
-  private fileInterpreterManager: FileInterpreterManager;
-  private cache: ICacheAdapter;
-
-  constructor(cache: ICacheAdapter) {
-    this.fileService = new FileService();
-    this.fileStorageManager = new FileStorageManager(new GCSStorageProvider());
-    this.fileInterpreterManager = new FileInterpreterManager(new GCPDocumentAI());
+  constructor(
+    private fileService: FileService,
+    private fileStorageManager: FileStorageManager,
+    private fileInterpreterManager: FileInterpreterManager,
+    private cache: ICacheAdapter,
+  ) {
+    this.fileService = fileService;
+    this.fileStorageManager = fileStorageManager;
+    this.fileInterpreterManager = fileInterpreterManager;
     this.cache = cache;
   }
 
