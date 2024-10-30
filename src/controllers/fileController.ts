@@ -21,7 +21,7 @@ export default class FileController {
     this.cache = cache;
   }
 
-  public getSignedURL = wrapAsyncController(async (req: Request, res: Response): Promise<Response> => {
+  public getSignedUrl = wrapAsyncController(async (req: Request, res: Response): Promise<Response> => {
     const { fileUniqueName } = req.params;
 
     const fileExist = await this.fileService.fileExists(fileUniqueName);
@@ -29,14 +29,14 @@ export default class FileController {
       return sendResponse(res, StatusCodes.NOT_FOUND, 'File not found', null, true);
     }
 
-    const cachedSignedURL = await this.cache.get(fileUniqueName);
-    if (cachedSignedURL) {
-      return sendResponse(res, StatusCodes.OK, 'Returning cached URL', { signedURL: cachedSignedURL }, false);
+    const cachedSignedUrl = await this.cache.get(fileUniqueName);
+    if (cachedSignedUrl) {
+      return sendResponse(res, StatusCodes.OK, 'Returning cached URL', { signedUrl: cachedSignedUrl }, false);
     }
 
-    const signedURL = await this.fileStorageManager.getSignedURL(fileUniqueName);
-    await this.cache.set(fileUniqueName, signedURL, env.CACHE_TTL_MS_SIGNED_URL);
-    return sendResponse(res, StatusCodes.OK, 'Signed URL succesfully generated', { signedURL }, false);
+    const signedUrl = await this.fileStorageManager.getSignedUrl(fileUniqueName);
+    await this.cache.set(fileUniqueName, signedUrl, env.CACHE_TTL_MS_SIGNED_URL);
+    return sendResponse(res, StatusCodes.OK, 'Signed URL succesfully generated', { signedUrl }, false);
   });
 
   public uploadFile = wrapAsyncController(async (req: Request, res: Response): Promise<Response> => {
