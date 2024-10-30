@@ -6,7 +6,6 @@ import { StatusCodes } from 'http-status-codes';
 
 describe('FileController - extractFileAttributes', () => {
   let fileController: FileController;
-
   let fileInterpreterManagerMock: jest.Mocked<FileInterpreterManager>;
   let req: Request;
   let res: Response;

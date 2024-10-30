@@ -43,6 +43,10 @@ export default class FileController {
     const { file, body } = req;
     const { tripId, tripEventId, fileTypeId }: FileUploadInput = body;
 
+    if ((!tripId && !tripEventId) || !fileTypeId) {
+      return sendResponse(res, StatusCodes.BAD_REQUEST, 'Missing input parameters', null, true);
+    }
+
     const newFile = await this.fileService.uploadAndSaveFile(file!, {
       tripId,
       tripEventId,
