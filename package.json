@@ -1,7 +1,7 @@
 {
-  "name": "core-service",
+  "name": "file-service",
   "version": "1.0.0",
-  "description": "core backend service",
+  "description": "file backend service",
   "main": "index.ts",
   "engines": {
     "node": "20.17.0"

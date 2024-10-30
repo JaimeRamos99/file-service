@@ -6,11 +6,13 @@ import { FileService } from '../../../src/services';
 import { FileStorageManager } from '../../../src/integrations/fileStorage';
 import { FileInterpreterManager } from '../../../src/integrations/fileInterpreter';
 import { env } from '../../../src/utils';
+import { initializeFileControllerTestSetup } from '../../helpers/fileControllerTestSetup';
 
 describe('FileController - getSignedUrl', () => {
   let fileController: FileController;
   let fileServiceMock: jest.Mocked<FileService>;
   let fileStorageManagerMock: jest.Mocked<FileStorageManager>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let fileInterpreterManagerMock: jest.Mocked<FileInterpreterManager>;
   let cacheMock: jest.Mocked<ICacheAdapter>;
   let req: Request;
@@ -19,39 +21,17 @@ describe('FileController - getSignedUrl', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    fileServiceMock = {
-      fileExists: jest.fn(),
-      uploadAndSaveFile: jest.fn(),
-    } as unknown as jest.Mocked<FileService>;
-
-    fileStorageManagerMock = {
-      getSignedUrl: jest.fn(),
-    } as unknown as jest.Mocked<FileStorageManager>;
-
-    fileInterpreterManagerMock = {
-      processFile: jest.fn(),
-    } as unknown as jest.Mocked<FileInterpreterManager>;
-
-    cacheMock = {
-      get: jest.fn(),
-      set: jest.fn(),
-      delete: jest.fn(),
-    } as unknown as jest.Mocked<ICacheAdapter>;
-
-    fileController = new FileController(
+    ({
+      fileController,
       fileServiceMock,
       fileStorageManagerMock,
       fileInterpreterManagerMock,
       cacheMock,
-    );
-
-    req = {} as Request;
-    res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-      send: jest.fn(),
-    } as unknown as Response;
+      req,
+      res,
+    } = initializeFileControllerTestSetup());
   });
+  const next = jest.fn();
 
   function setFileExists(exists: boolean) {
     fileServiceMock.fileExists.mockResolvedValue(exists);
@@ -68,7 +48,6 @@ describe('FileController - getSignedUrl', () => {
   describe('Success Cases', () => {
     it('should return 404 Not Found if file unique name does not exist in the DB', async () => {
       const inexistentFile = 'inexistent_file.pdf';
-      const next = jest.fn();
 
       // Set the file unique name in the request parameters
       setFileUniqueName(inexistentFile);
@@ -105,7 +84,6 @@ describe('FileController - getSignedUrl', () => {
     it('should return cached signed URL if available', async () => {
       const fileUniqueName = 'file_unique_name_test_01.pdf';
       const signedUrl = 'cached-signed-url.com';
-      const next = jest.fn();
 
       // Set the file unique name in the request parameters
       setFileUniqueName(fileUniqueName);
@@ -147,7 +125,6 @@ describe('FileController - getSignedUrl', () => {
     it('should generate and return a new signed URL if not in cache', async () => {
       const fileUniqueName = 'file_unique_name_test_02.pdf';
       const signedUrl = 'new-signed-URL.com';
-      const next = jest.fn();
 
       // Set the file unique name in the request parameters
       setFileUniqueName(fileUniqueName);
@@ -202,7 +179,6 @@ describe('FileController - getSignedUrl', () => {
   describe('Error Handling', () => {
     it('should pass errors to next function when fileService.fileExists throws an exception', async () => {
       const fileUniqueName = 'file_unique_name_test_03.pdf';
-      const next = jest.fn();
 
       setFileUniqueName(fileUniqueName);
 
@@ -230,7 +206,6 @@ describe('FileController - getSignedUrl', () => {
 
     it('should call next with error when cache.get throws an exception', async () => {
       const fileUniqueName = 'file_unique_name_test_04.pdf';
-      const next = jest.fn();
 
       setFileUniqueName(fileUniqueName);
 
@@ -262,7 +237,6 @@ describe('FileController - getSignedUrl', () => {
 
     it('should call next with error when fileStorageManager.getSignedUrl throws an exception', async () => {
       const fileUniqueName = 'file_unique_name_test_05.pdf';
-      const next = jest.fn();
 
       setFileUniqueName(fileUniqueName);
 
@@ -299,7 +273,6 @@ describe('FileController - getSignedUrl', () => {
     it('should call next with error when cache.set throws an exception', async () => {
       const fileUniqueName = 'file_unique_name_test_06.pdf';
       const signedUrl = 'http://signed-url.com';
-      const next = jest.fn();
 
       setFileUniqueName(fileUniqueName);
 
