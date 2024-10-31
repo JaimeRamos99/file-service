@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { FileController } from '../../../../src/controllers';
-import { FileInterpreterManager } from '../../../../src/integrations/fileInterpreter';
-import { initializeFileControllerTestSetup } from '../../helpers/fileControllerTestSetup';
+import { FileController } from '../../../src/controllers';
+import { FileInterpreterManager } from '../../../src/integrations/fileInterpreter';
+import { initializeFileControllerTestSetup } from '../helpers/fileControllerTestSetup';
 import { StatusCodes } from 'http-status-codes';
 
 describe('FileController - extractFileAttributes', () => {
