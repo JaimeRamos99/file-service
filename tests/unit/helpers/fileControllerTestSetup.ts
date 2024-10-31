@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { FileController } from '../../src/controllers';
-import { ICacheAdapter } from '../../src/cache/adapters';
-import { FileService } from '../../src/services';
-import { FileStorageManager } from '../../src/integrations/fileStorage';
-import { FileInterpreterManager } from '../../src/integrations/fileInterpreter';
+import { FileController } from '../../../src/controllers';
+import { ICacheAdapter } from '../../../src/cache/adapters';
+import { FileService } from '../../../src/services';
+import { FileStorageManager } from '../../../src/integrations/fileStorage';
+import { FileInterpreterManager } from '../../../src/integrations/fileInterpreter';
 
 export function initializeFileControllerTestSetup() {
   // Create mocks

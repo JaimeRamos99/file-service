@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { FileController } from '../../../src/controllers';
-import { ICacheAdapter } from '../../../src/cache/adapters';
+import { FileController } from '../../../../src/controllers';
+import { ICacheAdapter } from '../../../../src/cache/adapters';
 import { StatusCodes } from 'http-status-codes';
-import { FileService } from '../../../src/services';
-import { FileStorageManager } from '../../../src/integrations/fileStorage';
-import { env } from '../../../src/utils';
+import { FileService } from '../../../../src/services';
+import { FileStorageManager } from '../../../../src/integrations/fileStorage';
+import { env } from '../../../../src/utils';
 import { initializeFileControllerTestSetup } from '../../helpers/fileControllerTestSetup';
 
 describe('FileController - getSignedUrl', () => {

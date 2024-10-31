@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { FileController } from '../../../src/controllers';
 import { StatusCodes } from 'http-status-codes';
 import { FileService } from '../../../src/services';
-import { initializeFileControllerTestSetup } from '../../helpers/fileControllerTestSetup';
+import { initializeFileControllerTestSetup } from '../helpers/fileControllerTestSetup';
 
 describe('FileController - uploadFile', () => {
   let fileController: FileController;
