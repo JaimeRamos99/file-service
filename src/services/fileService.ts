@@ -18,7 +18,7 @@ class FileService {
   }
 
   async uploadAndSaveFile(file: Express.Multer.File, input: FileUploadInput): Promise<IFile> {
-    const { tripId, tripEventId, fileTypeId } = input;
+    const { tripId, tripEventId, fileTypeId, userId } = input;
     const { mimetype, size, buffer, originalname } = file;
 
     const ext = path.extname(originalname).toLowerCase();
@@ -41,6 +41,7 @@ class FileService {
       file_extension: mimetype,
       file_size: size,
       file_hash: fileHash,
+      created_by: userId,
     };
 
     const [newFile] = await Promise.all([
@@ -54,7 +55,7 @@ class FileService {
         trip_id: tripId,
         trip_event_id: tripEventId,
       };
-      console.log(fileTripEventData);
+
       await this.fileTripEventRepository.create(fileTripEventData);
     }
 

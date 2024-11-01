@@ -10,6 +10,6 @@ export function sendResponse(
   return res.status(statusCode).send({
     error,
     message,
-    body: data,
+    data,
   });
 }

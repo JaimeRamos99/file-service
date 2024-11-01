@@ -47,10 +47,13 @@ export default class FileController {
       return sendResponse(res, StatusCodes.BAD_REQUEST, 'Missing input parameters', null, true);
     }
 
+    const userId = res.locals.user.sub;
+
     const newFile = await this.fileService.uploadAndSaveFile(file!, {
+      fileTypeId,
       tripId,
       tripEventId,
-      fileTypeId,
+      userId,
     });
     return sendResponse(res, StatusCodes.OK, 'File uploaded successfully', newFile, false);
   });

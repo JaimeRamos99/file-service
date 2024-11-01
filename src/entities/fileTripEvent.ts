@@ -11,6 +11,7 @@ export interface IFileTripEvent {
 
 export type FileUploadInput = {
   fileTypeId: string;
-  tripEventId?: string;
   tripId?: string;
+  tripEventId?: string;
+  userId: string;
 };
