@@ -61,7 +61,7 @@ describe('FileController - getSignedUrl', () => {
       expect(res.send).toHaveBeenCalledWith({
         error: true,
         message: 'File not found',
-        body: null,
+        data: null,
       });
       // Verify that cache and storage methods were not called
       expect(cacheMock.get).not.toHaveBeenCalled();
@@ -104,7 +104,7 @@ describe('FileController - getSignedUrl', () => {
       expect(res.send).toHaveBeenCalledWith({
         error: false,
         message: 'Returning cached URL',
-        body: { signedUrl },
+        data: { signedUrl },
       });
 
       // Ensure that no further processing occurred
@@ -159,7 +159,7 @@ describe('FileController - getSignedUrl', () => {
       expect(res.send).toHaveBeenCalledWith({
         error: false,
         message: 'Signed URL succesfully generated',
-        body: { signedUrl },
+        data: { signedUrl },
       });
 
       // Verify that next was not called, indicating no errors occurred

@@ -48,7 +48,6 @@ export default class FileController {
     }
 
     const userId = res.locals.user.sub;
-
     const newFile = await this.fileService.uploadAndSaveFile(file!, {
       fileTypeId,
       tripId,

@@ -28,8 +28,8 @@ describe('FileController - uploadFile', () => {
         fileTypeId: 'type789',
       };
 
-      // Mock the response from uploadAndSaveFile
-      const newFile = { id: 'file123', ...req.body };
+      // Mock the response from uploadAndSaveFile // REFACTOR
+      const newFile = { file_id: 'file123' };
 
       fileServiceMock.uploadAndSaveFile.mockResolvedValue(newFile);
 
@@ -38,8 +38,10 @@ describe('FileController - uploadFile', () => {
       // Verify that uploadAndSaveFile was called correctly
       expect(fileServiceMock.uploadAndSaveFile).toHaveBeenCalledTimes(1);
       expect(fileServiceMock.uploadAndSaveFile).toHaveBeenCalledWith(req.file, {
-        tripId: req.body.tripId,
         fileTypeId: req.body.fileTypeId,
+        tripId: req.body.tripId,
+        tripEventId: undefined,
+        userId: res.locals.user.sub,
       });
 
       // Verify that res.status and res.send were called with the correct arguments
@@ -49,7 +51,7 @@ describe('FileController - uploadFile', () => {
       expect(res.send).toHaveBeenCalledWith({
         error: false,
         message: 'File uploaded successfully',
-        body: newFile,
+        data: newFile,
       });
 
       // Verify that next was not called
@@ -74,7 +76,7 @@ describe('FileController - uploadFile', () => {
       expect(res.send).toHaveBeenCalledWith({
         error: true,
         message: 'Missing input parameters',
-        body: null,
+        data: null,
       });
       expect(next).not.toHaveBeenCalled();
     });
@@ -96,9 +98,10 @@ describe('FileController - uploadFile', () => {
       // Verify that uploadAndSaveFile was called with the correct arguments
       expect(fileServiceMock.uploadAndSaveFile).toHaveBeenCalledTimes(1);
       expect(fileServiceMock.uploadAndSaveFile).toHaveBeenCalledWith(req.file, {
+        fileTypeId: req.body.fileTypeId,
         tripId: req.body.tripId,
         tripEventId: req.body.tripEventId,
-        fileTypeId: req.body.fileTypeId,
+        userId: res.locals.user.sub,
       });
 
       // Verify that next was called with the error

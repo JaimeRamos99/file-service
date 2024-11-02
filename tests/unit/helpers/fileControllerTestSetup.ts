@@ -41,6 +41,7 @@ export function initializeFileControllerTestSetup() {
     status: jest.fn().mockReturnThis(),
     json: jest.fn(),
     send: jest.fn(),
+    locals: { user: { sub: 'test-user-id' } },
   } as unknown as jest.Mocked<Response>;
 
   return {

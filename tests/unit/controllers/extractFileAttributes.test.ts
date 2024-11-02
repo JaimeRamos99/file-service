@@ -39,7 +39,7 @@ describe('FileController - extractFileAttributes', () => {
       expect(res.send).toHaveBeenCalledWith({
         error: false,
         message: 'Attributes extracted succesfully',
-        body: extractedAttributes,
+        data: extractedAttributes,
       });
 
       // Verify that next was not called
