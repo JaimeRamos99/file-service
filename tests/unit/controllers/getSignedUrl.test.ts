@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import { FileService } from '../../../src/services';
 import { FileStorageManager } from '../../../src/integrations/fileStorage';
 import { env } from '../../../src/utils';
-import { initializeFileControllerTestSetup } from '../helpers/fileControllerTestSetup';
+import { initializeFileControllerTestSetup } from '../../setup/fileControllerTestSetup';
 
 describe('FileController - getSignedUrl', () => {
   let fileController: FileController;
