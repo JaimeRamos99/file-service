@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import { FileService } from '../services';
 import { Request, Response } from 'express';
 import { FileStorageManager } from '../integrations/fileStorage';
@@ -35,7 +36,11 @@ export default class FileController {
     }
 
     const signedUrl = await this.fileStorageManager.getSignedUrl(fileUniqueName);
-    await this.cache.set(fileUniqueName, signedUrl, env.CACHE_TTL_MS_SIGNED_URL);
+    await this.cache.set(
+      `${env.CACHE_KEY_PREFIX_SIGNED_URL}${fileUniqueName}`,
+      signedUrl,
+      env.CACHE_TTL_MS_SIGNED_URL,
+    );
     return sendResponse(res, StatusCodes.OK, 'Signed URL succesfully generated', { signedUrl }, false);
   });
 
@@ -61,7 +66,25 @@ export default class FileController {
     async (req: Request, res: Response): Promise<Response> => {
       const { buffer } = req.file!;
 
+      const fileHash = createHash('sha256').update(buffer).digest('hex');
+      const cacheKey = `${env.CACHE_KEY_PREFIX_FILE_ATTRIBUTES}${fileHash}`;
+
+      const cachedFileAttributes = await this.cache.get(cacheKey);
+
+      if (cachedFileAttributes) {
+        return sendResponse(
+          res,
+          StatusCodes.OK,
+          'Returning cached File attributes',
+          { signedUrl: JSON.parse(cachedFileAttributes) },
+          false,
+        );
+      }
+
       const response = await this.fileInterpreterManager.processFile(buffer);
+
+      await this.cache.set(cacheKey, JSON.stringify(response), env.CACHE_TTL_MS_FILE_ATTRIBUTES);
+
       return sendResponse(res, StatusCodes.OK, 'Attributes extracted succesfully', response, false);
     },
   );

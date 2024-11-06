@@ -1,6 +1,9 @@
 import { cleanEnv, json, num, str } from 'envalid';
 
 export const env = cleanEnv(process.env, {
+  CACHE_KEY_PREFIX_FILE_ATTRIBUTES: str(),
+  CACHE_KEY_PREFIX_SIGNED_URL: str(),
+  CACHE_TTL_MS_FILE_ATTRIBUTES: num(),
   CACHE_TTL_MS_SIGNED_URL: num(),
   DB_HOST: str(),
   DB_NAME: str(),
