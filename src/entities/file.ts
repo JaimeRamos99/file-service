@@ -3,6 +3,7 @@ export interface IFile {
   file_original_name?: string;
   file_unique_name?: string;
   file_type_id?: string;
+  is_deleted?: boolean;
   file_extension?: string;
   file_size?: number;
   file_hash?: string;

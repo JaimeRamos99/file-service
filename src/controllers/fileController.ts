@@ -88,4 +88,22 @@ export default class FileController {
       return sendResponse(res, StatusCodes.OK, 'Attributes extracted succesfully', response, false);
     },
   );
+
+  public deleteFile = wrapAsyncController(async (req: Request, res: Response): Promise<Response> => {
+    const { id: fileId } = req.params;
+    const file = await this.fileService.getFileById(fileId);
+
+    if (!file) {
+      return sendResponse(res, StatusCodes.NOT_FOUND, 'File not found', null, true);
+    }
+
+    // file already deleted
+    if (file.is_deleted) {
+      return sendResponse(res, StatusCodes.NO_CONTENT, '', null, false);
+    }
+
+    // file deleted succesfully
+    await this.fileService.softDeleteFile(fileId);
+    return sendResponse(res, StatusCodes.NO_CONTENT, '', null, false);
+  });
 }

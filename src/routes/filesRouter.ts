@@ -17,6 +17,7 @@ const fileController = new FileController(
 
 filesRouter.use(rateLimiter);
 filesRouter.get('/:fileUniqueName/signed-url', fileController.getSignedUrl);
+filesRouter.delete('/:id', fileController.deleteFile);
 filesRouter.post('/upload', upload.single('file'), checkFilePresence, fileController.uploadFile);
 filesRouter.post(
   '/extract-attributes',

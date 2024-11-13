@@ -11,7 +11,11 @@ export class FileRepository implements IFileRepository {
   private tableName = 'files';
   private knex = getKnexInstance();
 
-  async getFileByUniqueName(fileUniqueName: string): Promise<IFile | undefined> {
+  getFileById(fileId: string) {
+    return this.knex<IFile>(this.tableName).where({ file_id: fileId }).first();
+  }
+
+  getFileByUniqueName(fileUniqueName: string): Promise<IFile | undefined> {
     return this.knex<IFile>(this.tableName).where({ file_unique_name: fileUniqueName }).first();
   }
 
@@ -32,5 +36,9 @@ export class FileRepository implements IFileRepository {
       .andWhere(andCondition)
       .count();
     return Number(response?.count);
+  }
+
+  softDeleteFile(fileId: string) {
+    return this.knex<IFile>(this.tableName).where({ file_id: fileId }).update({ is_deleted: true });
   }
 }
