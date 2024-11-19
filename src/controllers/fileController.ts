@@ -3,7 +3,7 @@ import { FileService } from '../services';
 import { Request, Response } from 'express';
 import { FileStorageManager } from '../integrations/fileStorage';
 import { FileInterpreterManager } from '../integrations/fileInterpreter';
-import { env, sendResponse } from '../utils';
+import { calculateOffsetAndLimit, env, sendResponse } from '../utils';
 import { wrapAsyncController } from './wrapAsyncController';
 import { FileUploadInput } from '../entities';
 import { ICacheAdapter } from '../cache/adapters';
@@ -105,5 +105,15 @@ export default class FileController {
     // file deleted succesfully
     await this.fileService.softDeleteFile(fileId);
     return sendResponse(res, StatusCodes.NO_CONTENT, '', null, false);
+  });
+
+  public listFiles = wrapAsyncController(async (req: Request, res: Response): Promise<Response> => {
+    const { page, pageSize } = req.query;
+    const { offset, limit } = calculateOffsetAndLimit(page as string, pageSize as string);
+
+    const userId = res.locals.user.sub;
+    const files = await this.fileService.getUserFiles(userId, offset, limit);
+
+    return sendResponse(res, StatusCodes.OK, 'Files retrieved successfully', files, false);
   });
 }

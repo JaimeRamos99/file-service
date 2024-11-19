@@ -26,6 +26,7 @@ export async function seed(knex: Knex): Promise<void> {
       file_extension: 'pdf',
       file_size: 2048000, // size in bytes
       file_hash: 'seed data hash',
+      user_id: user1.user_id,
       created_at: knex.fn.now(),
       updated_at: knex.fn.now(),
       created_by: user1.user_id,
@@ -39,6 +40,7 @@ export async function seed(knex: Knex): Promise<void> {
       file_extension: 'jpg',
       file_size: 1024000,
       file_hash: 'seed data hash',
+      user_id: user1.user_id,
       created_at: knex.fn.now(),
       updated_at: knex.fn.now(),
       created_by: user1.user_id,
@@ -52,6 +54,7 @@ export async function seed(knex: Knex): Promise<void> {
       file_extension: 'xls',
       file_size: 512000,
       file_hash: 'seed data hash',
+      user_id: user1.user_id,
       created_at: knex.fn.now(),
       updated_at: knex.fn.now(),
       created_by: user1.user_id,

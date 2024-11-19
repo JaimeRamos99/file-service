@@ -25,6 +25,10 @@ class FileService {
     return this.fileRepository.softDeleteFile(fileId);
   }
 
+  getUserFiles(userId: string, offset: number, limit: number) {
+    return this.fileRepository.getUserFiles(userId, offset, limit);
+  }
+
   async uploadAndSaveFile(file: Express.Multer.File, input: FileUploadInput): Promise<IFile> {
     const { tripId, tripEventId, fileTypeId, userId } = input;
     const { mimetype, size, buffer, originalname } = file;

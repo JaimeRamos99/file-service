@@ -41,4 +41,11 @@ export class FileRepository implements IFileRepository {
   softDeleteFile(fileId: string) {
     return this.knex<IFile>(this.tableName).where({ file_id: fileId }).update({ is_deleted: true });
   }
+
+  async getUserFiles(userId: string, offset: number, limit: number) {
+    return this.knex<IFile>(this.tableName)
+      .where({ is_deleted: false, user_id: userId })
+      .offset(offset)
+      .limit(limit);
+  }
 }

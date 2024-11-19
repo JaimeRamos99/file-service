@@ -7,6 +7,7 @@ export interface IFile {
   file_extension?: string;
   file_size?: number;
   file_hash?: string;
+  user_id?: string;
   created_at?: string;
   updated_at?: string;
   created_by?: string;
