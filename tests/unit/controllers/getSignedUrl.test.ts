@@ -148,7 +148,11 @@ describe('FileController - getSignedUrl', () => {
 
       // Verify that cache.set was called once to store the new signed URL
       expect(cacheMock.set).toHaveBeenCalledTimes(1);
-      expect(cacheMock.set).toHaveBeenCalledWith(fileUniqueName, signedUrl, env.CACHE_TTL_MS_SIGNED_URL);
+      expect(cacheMock.set).toHaveBeenCalledWith(
+        `signedUrl:${fileUniqueName}`,
+        signedUrl,
+        env.CACHE_TTL_MS_SIGNED_URL,
+      );
 
       // Verify that the response status was set to 200 OK
       expect(res.status).toHaveBeenCalledTimes(1);
@@ -290,7 +294,11 @@ describe('FileController - getSignedUrl', () => {
       expect(fileStorageManagerMock.getSignedUrl).toHaveBeenCalledTimes(1);
       expect(fileStorageManagerMock.getSignedUrl).toHaveBeenCalledWith(fileUniqueName);
       expect(cacheMock.set).toHaveBeenCalledTimes(1);
-      expect(cacheMock.set).toHaveBeenCalledWith(fileUniqueName, signedUrl, env.CACHE_TTL_MS_SIGNED_URL);
+      expect(cacheMock.set).toHaveBeenCalledWith(
+        `signedUrl:${fileUniqueName}`,
+        signedUrl,
+        env.CACHE_TTL_MS_SIGNED_URL,
+      );
 
       // Ensure that the response was not sent
       expect(res.status).not.toHaveBeenCalled();
