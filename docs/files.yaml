@@ -1,5 +1,50 @@
-# files.yaml
+openapi: 3.0.0
+info:
+  title: Files API
+  description: API endpoints for managing files
+  version: 1.0.0
+
 paths:
+  /files:
+    get:
+      tags:
+        - Files
+      summary: List all files
+      description: Retrieves a list of all files with optional filtering and pagination.
+      responses:
+        200:
+          description: Files retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        fileName:
+                          type: string
+                        tripId:
+                          type: integer
+                        tripEventId:
+                          type: integer
+                        fileTypeId:
+                          type: integer
+              example:
+                message: 'Files retrieved successfully'
+                data:
+                  - id: 1
+                    fileName: 'document.pdf'
+                    tripId: 123
+                    tripEventId: 456
+                    fileTypeId: 789
+
   /files/{fileUniqueName}/signed-url:
     get:
       tags:
@@ -26,6 +71,46 @@ paths:
                     description: The generated signed URL.
               example:
                 signedURL: 'https://your-storage-service.com/signed-url/file.txt'
+        404:
+          description: File not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: boolean
+              example:
+                message: 'File not found'
+                error: true
+
+  /files/{id}:
+    delete:
+      tags:
+        - Files
+      summary: Delete a file
+      description: Deletes a file by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the file to delete.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: File deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: 'File deleted successfully'
         404:
           description: File not found
           content:
