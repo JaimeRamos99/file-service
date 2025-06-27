@@ -61,9 +61,9 @@ class FileService {
       this.fileStorageManager.uploadFile(buffer, uniqueName),
     ]);
 
-    if (newFile.file_id) {
+    if (newFile.id) {
       const fileTripEventData = {
-        file_id: newFile.file_id,
+        file_id: newFile.id,
         trip_id: tripId,
         trip_event_id: tripEventId,
       };

@@ -12,7 +12,7 @@ export class FileRepository implements IFileRepository {
   private knex = getKnexInstance();
 
   getFileById(fileId: string) {
-    return this.knex<IFile>(this.tableName).where({ file_id: fileId }).first();
+    return this.knex<IFile>(this.tableName).where({ id: fileId }).first();
   }
 
   getFileByUniqueName(fileUniqueName: string): Promise<IFile | undefined> {
@@ -39,7 +39,7 @@ export class FileRepository implements IFileRepository {
   }
 
   softDeleteFile(fileId: string) {
-    return this.knex<IFile>(this.tableName).where({ file_id: fileId }).update({ is_deleted: true });
+    return this.knex<IFile>(this.tableName).where({ id: fileId }).update({ is_deleted: true });
   }
 
   async getUserFiles(userId: string, offset: number, limit: number) {

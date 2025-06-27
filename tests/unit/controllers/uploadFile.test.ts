@@ -29,7 +29,7 @@ describe('FileController - uploadFile', () => {
       };
 
       // Mock the response from uploadAndSaveFile // REFACTOR
-      const newFile = { file_id: 'file123' };
+      const newFile = { id: 'file123' };
 
       fileServiceMock.uploadAndSaveFile.mockResolvedValue(newFile);
 

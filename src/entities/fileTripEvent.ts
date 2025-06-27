@@ -1,12 +1,9 @@
-export interface IFileTripEvent {
-  file_trip_event_id?: string;
+import { IBaseEntity } from './common';
+
+export interface IFileTripEvent extends IBaseEntity {
   file_id?: string;
   trip_id?: string;
   trip_event_id?: string;
-  created_at?: string;
-  updated_at?: string;
-  created_by?: string;
-  updated_by?: string;
 }
 
 export type FileUploadInput = {
