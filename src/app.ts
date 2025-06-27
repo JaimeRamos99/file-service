@@ -1,5 +1,5 @@
 import express from 'express';
-import { filesRouter, healthRouter } from './routes/';
+import { filesRouter, healthRouter, tripRouter } from './routes/';
 import { errorHandler, checkAuthToken } from './middlewares';
 import { swaggerUi, swaggerSpec } from '../swagger';
 
@@ -12,6 +12,7 @@ app.use('/', healthRouter);
 app.use(checkAuthToken);
 
 app.use('/files', filesRouter);
+app.use('/trips', tripRouter);
 
 app.use(errorHandler);
 

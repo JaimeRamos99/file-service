@@ -1,0 +1,430 @@
+openapi: 3.0.0
+info:
+  title: Trip API
+  description: API endpoints for managing trips
+  version: 1.0.0
+
+paths:
+  /trips:
+    post:
+      tags:
+        - Trips
+      summary: Create a new trip
+      description: Creates a new trip for the authenticated user
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - trip_name
+                - initial_date
+              properties:
+                trip_name:
+                  type: string
+                  description: Name of the trip
+                  example: 'Trip to Paris'
+                trip_description:
+                  type: string
+                  description: Description of the trip
+                  example: 'A wonderful vacation in the city of lights'
+                trip_status:
+                  type: string
+                  description: Status of the trip
+                  example: 'planned'
+                initial_date:
+                  type: string
+                  format: date-time
+                  description: Start date of the trip
+                  example: '2024-09-01T00:00:00Z'
+                end_date:
+                  type: string
+                  format: date-time
+                  description: End date of the trip
+                  example: '2024-09-15T00:00:00Z'
+      responses:
+        201:
+          description: Trip created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Trip'
+                  error:
+                    type: boolean
+              example:
+                message: 'Trip created successfully'
+                data:
+                  trip_id: '123e4567-e89b-12d3-a456-426614174000'
+                  trip_name: 'Trip to Paris'
+                  trip_description: 'A wonderful vacation in the city of lights'
+                  trip_status: 'planned'
+                  initial_date: '2024-09-01T00:00:00Z'
+                  end_date: '2024-09-15T00:00:00Z'
+                  active: true
+                  user_id: '123e4567-e89b-12d3-a456-426614174001'
+                  created_at: '2024-01-01T00:00:00Z'
+                  updated_at: '2024-01-01T00:00:00Z'
+                error: false
+        400:
+          description: Bad request - missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: boolean
+              example:
+                message: 'Missing required fields: trip_name and initial_date'
+                error: true
+        401:
+          description: Unauthorized - invalid or missing token
+
+    get:
+      tags:
+        - Trips
+      summary: Get all trips for the authenticated user
+      description: Retrieves a paginated list of trips for the authenticated user
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 10
+          description: Number of items per page
+      responses:
+        200:
+          description: Trips retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      trips:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Trip'
+                      pagination:
+                        $ref: '#/components/schemas/Pagination'
+                  error:
+                    type: boolean
+              example:
+                message: 'Trips retrieved successfully'
+                data:
+                  trips:
+                    - trip_id: '123e4567-e89b-12d3-a456-426614174000'
+                      trip_name: 'Trip to Paris'
+                      trip_description: 'A wonderful vacation in the city of lights'
+                      trip_status: 'planned'
+                      initial_date: '2024-09-01T00:00:00Z'
+                      end_date: '2024-09-15T00:00:00Z'
+                      active: true
+                      user_id: '123e4567-e89b-12d3-a456-426614174001'
+                      created_at: '2024-01-01T00:00:00Z'
+                      updated_at: '2024-01-01T00:00:00Z'
+                  pagination:
+                    total: 1
+                    page: 1
+                    pageSize: 10
+                    totalPages: 1
+                error: false
+        401:
+          description: Unauthorized - invalid or missing token
+
+  /trips/{id}:
+    get:
+      tags:
+        - Trips
+      summary: Get a specific trip by ID
+      description: Retrieves a specific trip by its ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Trip ID
+      responses:
+        200:
+          description: Trip retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Trip'
+                  error:
+                    type: boolean
+              example:
+                message: 'Trip retrieved successfully'
+                data:
+                  trip_id: '123e4567-e89b-12d3-a456-426614174000'
+                  trip_name: 'Trip to Paris'
+                  trip_description: 'A wonderful vacation in the city of lights'
+                  trip_status: 'planned'
+                  initial_date: '2024-09-01T00:00:00Z'
+                  end_date: '2024-09-15T00:00:00Z'
+                  active: true
+                  user_id: '123e4567-e89b-12d3-a456-426614174001'
+                  created_at: '2024-01-01T00:00:00Z'
+                  updated_at: '2024-01-01T00:00:00Z'
+                error: false
+        404:
+          description: Trip not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: boolean
+              example:
+                message: 'Trip not found'
+                error: true
+        401:
+          description: Unauthorized - invalid or missing token
+
+    put:
+      tags:
+        - Trips
+      summary: Update a trip
+      description: Updates an existing trip
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Trip ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trip_name:
+                  type: string
+                  description: Name of the trip
+                  example: 'Updated Trip to Paris'
+                trip_description:
+                  type: string
+                  description: Description of the trip
+                  example: 'An updated description'
+                trip_status:
+                  type: string
+                  description: Status of the trip
+                  example: 'in_progress'
+                initial_date:
+                  type: string
+                  format: date-time
+                  description: Start date of the trip
+                  example: '2024-09-01T00:00:00Z'
+                end_date:
+                  type: string
+                  format: date-time
+                  description: End date of the trip
+                  example: '2024-09-15T00:00:00Z'
+                active:
+                  type: boolean
+                  description: Whether the trip is active
+                  example: true
+      responses:
+        200:
+          description: Trip updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Trip'
+                  error:
+                    type: boolean
+              example:
+                message: 'Trip updated successfully'
+                data:
+                  trip_id: '123e4567-e89b-12d3-a456-426614174000'
+                  trip_name: 'Updated Trip to Paris'
+                  trip_description: 'An updated description'
+                  trip_status: 'in_progress'
+                  initial_date: '2024-09-01T00:00:00Z'
+                  end_date: '2024-09-15T00:00:00Z'
+                  active: true
+                  user_id: '123e4567-e89b-12d3-a456-426614174001'
+                  created_at: '2024-01-01T00:00:00Z'
+                  updated_at: '2024-01-02T00:00:00Z'
+                error: false
+        400:
+          description: Bad request - invalid data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: boolean
+              example:
+                message: 'End date cannot be before initial date'
+                error: true
+        404:
+          description: Trip not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: boolean
+              example:
+                message: 'Trip not found'
+                error: true
+        401:
+          description: Unauthorized - invalid or missing token
+
+    delete:
+      tags:
+        - Trips
+      summary: Delete a trip
+      description: Soft deletes a trip (marks as deleted but doesn't remove from database)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Trip ID
+      responses:
+        204:
+          description: Trip deleted successfully
+        404:
+          description: Trip not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: boolean
+              example:
+                message: 'Trip not found'
+                error: true
+        401:
+          description: Unauthorized - invalid or missing token
+
+components:
+  schemas:
+    Trip:
+      type: object
+      properties:
+        trip_id:
+          type: string
+          format: uuid
+          description: Unique identifier for the trip
+        trip_name:
+          type: string
+          description: Name of the trip
+        trip_description:
+          type: string
+          description: Description of the trip
+        trip_status:
+          type: string
+          description: Status of the trip
+        initial_date:
+          type: string
+          format: date-time
+          description: Start date of the trip
+        end_date:
+          type: string
+          format: date-time
+          description: End date of the trip
+        active:
+          type: boolean
+          description: Whether the trip is active
+        user_id:
+          type: string
+          format: uuid
+          description: ID of the user who owns the trip
+        created_at:
+          type: string
+          format: date-time
+          description: When the trip was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the trip was last updated
+        created_by:
+          type: string
+          format: uuid
+          description: ID of the user who created the trip
+        updated_by:
+          type: string
+          format: uuid
+          description: ID of the user who last updated the trip
+        is_deleted:
+          type: boolean
+          description: Whether the trip is marked as deleted
+
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of items
+        page:
+          type: integer
+          description: Current page number
+        pageSize:
+          type: integer
+          description: Number of items per page
+        totalPages:
+          type: integer
+          description: Total number of pages
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

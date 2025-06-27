@@ -1,10 +1,16 @@
 import { IBaseEntity } from './common';
 
 export interface ITrip extends IBaseEntity {
-  user_id?: string;
   trip_name?: string;
   trip_description?: string;
   trip_status?: string;
-  start_date?: string;
+  initial_date?: string;
   end_date?: string;
+  user_id?: string;
 }
+
+export type CreateTripInput = Omit<ITrip, keyof IBaseEntity>;
+
+export type UpdateTripInput = CreateTripInput & {
+  updated_by?: string;
+};
